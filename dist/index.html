@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tealios — Errata</title>
+  <meta name="description" content="Errata is an AI-assisted writing app where everything is a fragment. Fragments compose into LLM context to generate story continuations. Built by Tealios.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Manrope:wght@200..800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/assets/index-CrYSnIQj.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BourHq7T.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <svg class="logo-mark" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="1" y="1" width="9" height="9" rx="2" fill="currentColor" opacity="0.7"/>
+          <rect x="14" y="1" width="9" height="9" rx="2" fill="currentColor" opacity="0.3"/>
+          <rect x="1" y="14" width="9" height="9" rx="2" fill="currentColor" opacity="0.3"/>
+          <rect x="14" y="14" width="9" height="9" rx="2" fill="currentColor"/>
+        </svg>
+        tealios
+      </a>
+      <div class="nav-links">
+        <a href="#fragments">Fragments</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#features">Features</a>
+        <a href="https://github.com/tealios/errata" class="nav-github" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge" data-reveal data-delay="100">
+          <span class="badge-dot"></span>
+          Open Source
+        </div>
+        <h1 class="hero-heading">
+          <span class="hero-line" data-reveal data-delay="200">
+            <span>Every story is</span>
+          </span>
+          <span class="hero-line" data-reveal data-delay="380">
+            <span>made of <em>fragments</em>.</span>
+          </span>
+        </h1>
+        <p class="hero-sub" data-reveal data-delay="550">
+          Errata is an AI-assisted writing app where prose, characters, guidelines, and knowledge are all fragments. They compose into rich context that brings your stories to life.
+        </p>
+        <div class="hero-actions" data-reveal data-delay="700">
+          <a href="https://github.com/tealios/errata" class="btn btn-primary" target="_blank" rel="noopener">
+            Get Started
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+          </a>
+          <a href="https://github.com/tealios/errata" class="btn btn-ghost" target="_blank" rel="noopener">
+            View Source
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating fragment cards -->
+    <div class="hero-fragments" aria-hidden="true">
+      <div class="frag-card" style="--x: -420px; --y: -50px; --rot: -3deg; --enter-delay: 0.8s; --float-dur: 7s;">
+        <div class="frag-head">
+          <code class="frag-id">pr-x7k2</code>
+          <span class="frag-type type-prose">Prose</span>
+        </div>
+        <p class="frag-body">"The lighthouse keeper hadn't spoken to another soul in thirteen years..."</p>
+      </div>
+
+      <div class="frag-card" style="--x: 360px; --y: -110px; --rot: 2.5deg; --enter-delay: 1s; --float-dur: 8s;">
+        <div class="frag-head">
+          <code class="frag-id">ch-m4a9</code>
+          <span class="frag-type type-char">Character</span>
+        </div>
+        <p class="frag-body">Elara — Former cartographer, now blind. Navigates by sound and memory alone.</p>
+      </div>
+
+      <div class="frag-card" style="--x: -380px; --y: 150px; --rot: 2deg; --enter-delay: 1.2s; --float-dur: 6.5s;">
+        <div class="frag-head">
+          <code class="frag-id">gl-t8f1</code>
+          <span class="frag-type type-guide">Guideline</span>
+        </div>
+        <p class="frag-body">Maintain second-person perspective throughout. Present tense only.</p>
+      </div>
+
+      <div class="frag-card" style="--x: 400px; --y: 110px; --rot: -2deg; --enter-delay: 1.4s; --float-dur: 7.5s;">
+        <div class="frag-head">
+          <code class="frag-id">kn-p2d5</code>
+          <span class="frag-type type-know">Knowledge</span>
+        </div>
+        <p class="frag-body">The Meridian Sea freezes solid every seventh winter. Last freeze: Year 891.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Fragment System -->
+  <section class="section" id="fragments">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="section-label">The Foundation</span>
+        <h2>Everything is a fragment.</h2>
+        <p class="section-desc">Fragments are atomic units of story. Each one carries a piece of your world — a character sketch, a rule, a piece of lore, a passage of prose. They compose together to form rich context for AI generation.</p>
+      </div>
+
+      <div class="type-grid">
+        <div class="type-card" data-reveal data-delay="0">
+          <div class="type-icon icon-prose">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M4 7h16M4 12h12M4 17h8"/>
+            </svg>
+          </div>
+          <h3>Prose</h3>
+          <code>pr-****</code>
+          <p>Your story text. The living body of your narrative, written by you or generated by AI.</p>
+        </div>
+
+        <div class="type-card" data-reveal data-delay="80">
+          <div class="type-icon icon-char">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M5 20c0-4 3.1-7 7-7s7 3 7 7"/>
+            </svg>
+          </div>
+          <h3>Characters</h3>
+          <code>ch-****</code>
+          <p>Personalities, backstories, motivations. They inform every generation the AI produces.</p>
+        </div>
+
+        <div class="type-card" data-reveal data-delay="160">
+          <div class="type-icon icon-guide">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3L2 9l10 6 10-6-10-6z"/>
+              <path d="M2 17l10 6 10-6"/>
+              <path d="M2 13l10 6 10-6"/>
+            </svg>
+          </div>
+          <h3>Guidelines</h3>
+          <code>gl-****</code>
+          <p>Stylistic rules, tone directives, narrative constraints. Guide the AI's voice and approach.</p>
+        </div>
+
+        <div class="type-card" data-reveal data-delay="240">
+          <div class="type-icon icon-know">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7v10l10 5 10-5V7L12 2z"/>
+              <path d="M12 22V12"/>
+              <path d="M2 7l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>Knowledge</h3>
+          <code>kn-****</code>
+          <p>World-building facts, lore, timelines. The grounding truth that keeps your world consistent.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pipeline -->
+  <section class="section section-alt" id="pipeline">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="section-label">The Pipeline</span>
+        <h2>From fragments to story.</h2>
+        <p class="section-desc">Errata's generation pipeline composes your fragments into rich context, runs them through AI with fragment tools, and produces continuations that respect your world.</p>
+      </div>
+
+      <div class="pipeline-flow">
+        <div class="pipeline-step" data-reveal data-delay="0">
+          <div class="step-num">01</div>
+          <h3>Compose</h3>
+          <p>Sticky fragments load in full. Non-sticky fragments appear as shortlists. The context builder assembles a complete picture of your world.</p>
+        </div>
+        <div class="pipeline-connector" data-reveal data-delay="100" aria-hidden="true">
+          <svg width="48" height="2" viewBox="0 0 48 2"><line x1="0" y1="1" x2="48" y2="1" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/></svg>
+        </div>
+        <div class="pipeline-step" data-reveal data-delay="150">
+          <div class="step-num">02</div>
+          <h3>Generate</h3>
+          <p>The LLM receives your context and input. It can use fragment tools to read, edit, and create fragments during generation.</p>
+        </div>
+        <div class="pipeline-connector" data-reveal data-delay="250" aria-hidden="true">
+          <svg width="48" height="2" viewBox="0 0 48 2"><line x1="0" y1="1" x2="48" y2="1" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/></svg>
+        </div>
+        <div class="pipeline-step" data-reveal data-delay="300">
+          <div class="step-num">03</div>
+          <h3>Integrate</h3>
+          <p>New prose saves as a fragment. The librarian agent updates summaries, tracks characters, and flags contradictions automatically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="section-label">Capabilities</span>
+        <h2>Built for serious writers.</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card" data-reveal data-delay="0">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+          <h3>Plugin System</h3>
+          <p>Extend with custom fragment types, LLM tools, API routes, and pipeline hooks. Your workflow, your rules.</p>
+        </div>
+
+        <div class="feature-card" data-reveal data-delay="70">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3>Streaming Generation</h3>
+          <p>Watch your story unfold in real-time with full tool-use transparency and debug inspection.</p>
+        </div>
+
+        <div class="feature-card" data-reveal data-delay="140">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+            </svg>
+          </div>
+          <h3>Librarian Agent</h3>
+          <p>A background AI that maintains summaries, detects character mentions, and flags contradictions.</p>
+        </div>
+
+        <div class="feature-card" data-reveal data-delay="210">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <h3>No Database</h3>
+          <p>Pure filesystem storage. Your stories are JSON files you can read, version, and back up. Zero lock-in.</p>
+        </div>
+
+        <div class="feature-card" data-reveal data-delay="280">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+              <line x1="14.5" y1="4" x2="9.5" y2="20"/>
+            </svg>
+          </div>
+          <h3>Type-Safe API</h3>
+          <p>End-to-end type safety with Elysia. Server calls bypass HTTP in SSR. Full TypeScript throughout.</p>
+        </div>
+
+        <div class="feature-card" data-reveal data-delay="350">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20"/>
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+            </svg>
+          </div>
+          <h3>Open Architecture</h3>
+          <p>Swap LLM providers. Write custom plugins. Fork and extend. Errata is designed to be yours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta">
+    <div class="cta-glow" aria-hidden="true"></div>
+    <div class="container">
+      <div class="cta-content" data-reveal>
+        <span class="section-label">Open Source</span>
+        <h2>Write with fragments.<br>Build with us.</h2>
+        <p>Errata is open source and free. Join the community, contribute plugins, or just start writing.</p>
+        <a href="https://github.com/tealios/errata" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          Star on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo">
+          <svg class="logo-mark" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="1" y="1" width="9" height="9" rx="2" fill="currentColor" opacity="0.7"/>
+            <rect x="14" y="1" width="9" height="9" rx="2" fill="currentColor" opacity="0.3"/>
+            <rect x="1" y="14" width="9" height="9" rx="2" fill="currentColor" opacity="0.3"/>
+            <rect x="14" y="14" width="9" height="9" rx="2" fill="currentColor"/>
+          </svg>
+          tealios
+        </a>
+        <p class="footer-tagline">Building tools for writers.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#fragments">Fragments</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#features">Features</a>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <a href="https://github.com/tealios/errata" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/tealios/errata/issues" target="_blank" rel="noopener">Issues</a>
+          <a href="https://github.com/tealios/errata/discussions" target="_blank" rel="noopener">Discussions</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Tealios. Open source under MIT.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
