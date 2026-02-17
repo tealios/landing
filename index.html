@@ -103,6 +103,12 @@
       transform: rotate(-2deg);
       animation: snakeDrift6 21s ease-in-out infinite;
     }
+    .snake-panel:nth-child(7) {
+      bottom: 72vh;
+      right: 72vw;
+      transform: rotate(-2deg);
+      animation: snakeDrift6 21s ease-in-out infinite;
+    }
 
     .panel-genre {
       display: inline-block;
@@ -293,6 +299,10 @@
     <span class="panel-genre">Erotica</span>
     <p class="panel-prose">His mouth found the hollow of her throat, and she forgot every language she'd ever spoken. The sheets twisted. The candle guttered. Outside, the city hummed on, oblivious and indifferent.</p>
   </div>
+  <div class="snake-panel">
+    <span class="panel-genre">Horror</span>
+    <p class="panel-prose">The house didn't creak. That was the problem. Every old house creaks, her mother had said. If it goes quiet, it's listening.</p>
+  </div>
 
   <main>
     <div class="logo">
@@ -364,19 +374,37 @@
       panelRects = Array.from(panels).map(p => p.getBoundingClientRect());
     }
 
+    const PANEL_FADE = 80; // soft fade distance in px
+
     function isInColorZone(px, py) {
+      let best = 0;
+
+      // Mouse proximity
       const dx = px - mouseX;
       const dy = py - mouseY;
       const mouseDist = Math.sqrt(dx * dx + dy * dy);
-      if (mouseDist < MOUSE_RADIUS) return Math.max(0, 1 - mouseDist / MOUSE_RADIUS);
+      if (mouseDist < MOUSE_RADIUS) {
+        best = Math.max(best, 1 - mouseDist / MOUSE_RADIUS);
+      }
 
+      // Soft glow around glass panels
       for (let i = 0; i < panelRects.length; i++) {
         const r = panelRects[i];
-        if (px >= r.left - 20 && px <= r.right + 20 && py >= r.top - 20 && py <= r.bottom + 20) {
-          return 1;
+        const cx = (r.left + r.right) / 2;
+        const cy = (r.top + r.bottom) / 2;
+        const hw = (r.right - r.left) / 2 + PANEL_FADE;
+        const hh = (r.bottom - r.top) / 2 + PANEL_FADE;
+
+        const distX = Math.max(0, Math.abs(px - cx) - (r.right - r.left) / 2);
+        const distY = Math.max(0, Math.abs(py - cy) - (r.bottom - r.top) / 2);
+        const dist = Math.sqrt(distX * distX + distY * distY);
+
+        if (dist < PANEL_FADE) {
+          best = Math.max(best, 1 - dist / PANEL_FADE);
         }
       }
-      return 0;
+
+      return best;
     }
 
     function lerp(a, b, t) {
@@ -437,7 +465,7 @@
 
       if (frameCount % 6 === 0) updatePanelRects();
 
-      ctx.lineWidth = 1.2;
+      ctx.lineWidth = 2.5;
 
       for (let i = 0; i < lines.length; i++) {
         const l = lines[i];
