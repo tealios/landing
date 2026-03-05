@@ -942,9 +942,10 @@
             <h3>Prose Chain</h3>
             <p>
               Your story is a chain of passages. Write a prompt, get prose back, edit it,
-              keep going. Three input modes (Freeform, Guided, Compose) depending on how
-              much control you want. Context is built from your fragments, not just
-              the last few paragraphs.
+              keep going. Three input modes: Freeform for open-ended writing, Guided for
+              when you want the model to suggest what happens next, and Compose for
+              long-form editing in a proper writing panel. You can abort mid-generation
+              and keep whatever was written so far.
             </p>
           </div>
           <div class="feature-img">
@@ -952,16 +953,33 @@
           </div>
         </div>
 
-        <!-- Feature 2: Characters -->
+        <!-- Feature 2: Prewriter -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-lavender">Pipeline</span>
+            <h3>Prewriter</h3>
+            <p>
+              Two-phase generation. A planner model outlines structure, pacing, and
+              dialogue beats first, then a writer model turns that outline into prose.
+              You can watch the chain-of-thought as it happens. Use a cheap model for
+              planning and a good one for writing, or the same model for both.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/11-generation-input.png" alt="Generation input with prewriter pipeline">
+          </div>
+        </div>
+
+        <!-- Feature 3: Characters -->
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-sage">Fragments</span>
             <h3>Characters, Lore &amp; Knowledge</h3>
             <p>
               Write character sheets in markdown. Pin important text so it doesn't
-              get overwritten. The librarian can update fragments on its own as
-              the story moves forward. You can also import SillyTavern character
-              cards if you have them.
+              get overwritten. Import SillyTavern character cards directly. The librarian
+              updates fragments on its own as the story moves forward. You can also
+              open a character in chat mode and just talk to them in-character.
             </p>
           </div>
           <div class="feature-img">
@@ -969,16 +987,34 @@
           </div>
         </div>
 
-        <!-- Feature 3: Librarian -->
+        <!-- Feature 4: Character Chat -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-rose">Conversation</span>
+            <h3>Character Chat</h3>
+            <p>
+              Pick a character and talk to them. The model gets their fragment, your
+              story context, and any lore you've written. Good for working out
+              how a character would react to something, or just seeing if your
+              characterization holds up in conversation.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/17-character-chat.png" alt="Character chat conversation">
+          </div>
+        </div>
+
+        <!-- Feature 5: Librarian -->
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-rose">Memory</span>
             <h3>The Librarian</h3>
             <p>
-              After you generate prose, the librarian reads it in the background.
-              It logs who appeared, catches contradictions, builds a timeline,
-              and proposes new fragments when something new comes up. You can
-              also just chat with it and ask questions about your own story.
+              Runs after every generation. It reads what you wrote, logs who appeared,
+              catches contradictions, builds a timeline, and proposes new fragments.
+              It also suggests directions for what could happen next, which you can
+              accept into guided mode. Dismiss suggestions you don't want.
+              Chat with it to ask questions about your own story.
             </p>
           </div>
           <div class="feature-img">
@@ -986,16 +1022,52 @@
           </div>
         </div>
 
-        <!-- Feature 4: Agents -->
+        <!-- Feature 6: Summaries & Chapters -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-peach">Structure</span>
+            <h3>Chapters &amp; Summaries</h3>
+            <p>
+              Drop chapter markers anywhere in your prose to organize the story.
+              Hierarchical summaries condense older passages so the model still
+              knows what happened fifty chapters ago without blowing out the
+              context window. Summary compaction keeps things tight automatically.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/12-guided-mode.png" alt="Guided writing mode with chapter structure">
+          </div>
+        </div>
+
+        <!-- Feature 7: Selection Transforms & Text Transforms -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-sage">Editing</span>
+            <h3>Transforms</h3>
+            <p>
+              Select text in the editor and run a context-aware rewrite on it. The model
+              sees your story, your characters, everything. Separate from that, text
+              transforms run automatically on output: auto-italicize dialogue tags,
+              strip markdown artifacts, whatever you set up. They're composable
+              and you can write your own.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/05-knowledge.png" alt="Knowledge fragments and editing tools">
+          </div>
+        </div>
+
+        <!-- Feature 8: Agents -->
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-lavender">Control</span>
             <h3>Agent Blocks</h3>
             <p>
-              If you want full control, switch to advanced mode. You lay out the
-              context yourself: system prompt, which fragments, summaries, even
-              script blocks that run your own code. You can also pick different
-              models for writing vs. chat vs. librarian.
+              Switch to advanced mode and lay out the context yourself. System prompt,
+              which fragments, summaries, script blocks that run your own code via
+              helper functions like getFragment and getFragments. Pick different
+              models for writing vs. chat vs. librarian, with fallback chains
+              if your first choice is down.
             </p>
           </div>
           <div class="feature-img">
@@ -1003,7 +1075,7 @@
           </div>
         </div>
 
-        <!-- Feature 5: Timelines -->
+        <!-- Feature 9: Timelines -->
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-peach">Exploration</span>
@@ -1019,20 +1091,20 @@
           </div>
         </div>
 
-        <!-- Feature 6: Settings -->
+        <!-- Feature 10: Settings & Models -->
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-sage">Customization</span>
-            <h3>Settings</h3>
+            <h3>Settings &amp; Models</h3>
             <p>
               Dark mode, light mode, high contrast. Four font slots you can swap.
-              Custom CSS if you want it. Text transforms, plugins, per-role model
-              selection, temperature controls. Most things you'd want to tweak
-              are exposed.
+              Custom CSS if you want it. Per-role model selection so you can use
+              a different model for writing, planning, chat, and librarian tasks,
+              each with its own temperature. Procedural SVG covers for your stories.
             </p>
           </div>
           <div class="feature-img">
-            <img src="screenshots/10-settings.png" alt="Extensive settings panel with typography, themes, and model configuration">
+            <img src="screenshots/10-settings.png" alt="Settings panel with typography, themes, and model configuration">
           </div>
         </div>
       </div>
