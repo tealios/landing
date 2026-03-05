@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Errata — Model-Assisted Fiction Writing</title>
-  <meta name="description" content="A local-first creative writing tool with living memory, character tracking, and branching timelines. Write stories that remember themselves.">
+  <title>Errata — Fiction Writing with Memory</title>
+  <meta name="description" content="A local writing tool that keeps track of your characters, lore, and plot. Branch timelines, chat with a librarian, write faster.">
   <link rel="icon" href="ErrataLogo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -857,8 +857,8 @@
       <img src="ErrataLogo.png" alt="Errata" class="hero-logo">
       <h1>Stories that <em>remember</em> themselves</h1>
       <p class="hero-sub">
-        A model-assisted fiction writing tool with living memory, character tracking,
-        branching timelines, and a librarian that never forgets.
+        A writing tool that keeps track of your characters, your lore, and your plot
+        so the model can too. Branch timelines, chat with your librarian, write faster.
       </p>
       <div class="hero-actions">
         <a href="https://github.com/tealios/errata" class="btn btn-primary">
@@ -887,9 +887,9 @@
         <p class="section-label">What is Errata</p>
         <h2 class="section-title">Your world, remembered</h2>
         <p class="section-desc">
-          Errata is a local-first creative writing application where the model doesn't just generate prose&hairsp;&mdash;&hairsp;it
-          understands your world. Characters, lore, timelines, and story arcs live as structured
-          fragments that it reads, references, and evolves as your story grows.
+          Most writing tools forget everything between sessions. Errata doesn't.
+          You build your world in structured fragments and the model reads all of it
+          when it writes. Characters grow, lore stays consistent, and nothing gets lost.
         </p>
       </div>
       <div class="pillars fade-in">
@@ -898,28 +898,28 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-dark)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           </div>
           <h3>Fragment System</h3>
-          <p>Characters, knowledge, guidelines, and prose are versioned fragments. Compose them into context however you want &mdash; the model sees exactly what matters.</p>
+          <p>Characters, world notes, guidelines, and prose are all fragments with version history. You pick which ones go into context. The model only sees what you want it to.</p>
         </div>
         <div class="pillar">
           <div class="pillar-icon sage">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5a6e50" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           </div>
           <h3>Living Librarian</h3>
-          <p>A background agent that analyzes every passage, tracks character mentions, detects contradictions, and suggests new fragments to keep your world consistent.</p>
+          <p>Runs after every generation. It reads what you wrote, notes who showed up, flags contradictions, and suggests new fragments when it spots something worth tracking.</p>
         </div>
         <div class="pillar">
           <div class="pillar-icon rose">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a5555" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
           <h3>Branching Timelines</h3>
-          <p>Explore "what if" without losing anything. Branch your story, try different paths, and switch between timelines. Every version is preserved.</p>
+          <p>Fork your story whenever you want to try something different. Each branch keeps its own prose, fragments, and history. Switch back anytime.</p>
         </div>
         <div class="pillar">
           <div class="pillar-icon lavender">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6a5e8a" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           </div>
           <h3>Fully Local</h3>
-          <p>Single binary, no database, no cloud dependency. Your stories live on your filesystem. Bring your own model provider &mdash; any OpenAI-compatible API works.</p>
+          <p>One file, no database, nothing phoning home. Stories are JSON on your disk. Hook up any OpenAI-compatible provider and you're set.</p>
         </div>
       </div>
     </div>
@@ -930,7 +930,7 @@
     <div class="section-inner">
       <div class="fade-in">
         <p class="section-label">Features</p>
-        <h2 class="section-title">Everything a writer needs</h2>
+        <h2 class="section-title">What you get</h2>
       </div>
 
       <div class="feature-grid">
@@ -938,12 +938,12 @@
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-peach">Writing</span>
-            <h3>Prose Chain with Assisted Generation</h3>
+            <h3>Prose Chain</h3>
             <p>
-              Write in Freeform, Guided, or Compose mode. Each passage gets a prompt
-              and the model generates prose that flows naturally from your existing story.
-              Reorder, branch, and edit with a rich Tiptap editor. The context window
-              is assembled from your fragments &mdash; not just raw text.
+              Your story is a chain of passages. Write a prompt, get prose back, edit it,
+              keep going. Three input modes (Freeform, Guided, Compose) depending on how
+              much control you want. Context is built from your fragments, not just
+              the last few paragraphs.
             </p>
           </div>
           <div class="feature-img">
@@ -957,10 +957,10 @@
             <span class="feature-tag tag-sage">Fragments</span>
             <h3>Characters, Lore &amp; Knowledge</h3>
             <p>
-              Define characters with markdown content, track version history,
-              freeze critical text, and let the librarian auto-update fragments
-              as your story evolves. Import SillyTavern character cards,
-              or build your world from scratch.
+              Write character sheets in markdown. Pin important text so it doesn't
+              get overwritten. The librarian can update fragments on its own as
+              the story moves forward. You can also import SillyTavern character
+              cards if you have them.
             </p>
           </div>
           <div class="feature-img">
@@ -972,12 +972,12 @@
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-rose">Memory</span>
-            <h3>The Librarian Never Forgets</h3>
+            <h3>The Librarian</h3>
             <p>
-              After each generation, a background agent analyzes your prose:
-              tracking character mentions, detecting contradictions, building
-              timelines, and suggesting new fragments. Chat with it to ask
-              about your world. It sees everything.
+              After you generate prose, the librarian reads it in the background.
+              It logs who appeared, catches contradictions, builds a timeline,
+              and proposes new fragments when something new comes up. You can
+              also just chat with it and ask questions about your own story.
             </p>
           </div>
           <div class="feature-img">
@@ -989,12 +989,12 @@
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-lavender">Control</span>
-            <h3>Configurable Agent Blocks</h3>
+            <h3>Agent Blocks</h3>
             <p>
-              Advanced mode lets you configure exactly what the model sees. Build
-              context from ordered blocks: system prompts, fragments, summaries,
-              and script blocks that run custom logic. Choose different models
-              for generation, chat, librarian, and directions.
+              If you want full control, switch to advanced mode. You lay out the
+              context yourself: system prompt, which fragments, summaries, even
+              script blocks that run your own code. You can also pick different
+              models for writing vs. chat vs. librarian.
             </p>
           </div>
           <div class="feature-img">
@@ -1006,11 +1006,11 @@
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-peach">Exploration</span>
-            <h3>Branching Timelines</h3>
+            <h3>Timelines</h3>
             <p>
-              Fork your story at any point. Each timeline gets its own prose chain,
-              fragments, and librarian history &mdash; fully isolated. Switch between
-              branches instantly and merge ideas when you're ready.
+              Branch at any passage. Each timeline is completely separate: its own
+              prose, its own fragments, its own librarian history. Good for trying
+              out a different direction without committing to it.
             </p>
           </div>
           <div class="feature-img">
@@ -1022,12 +1022,12 @@
         <div class="feature-card fade-in">
           <div class="feature-text">
             <span class="feature-tag tag-sage">Customization</span>
-            <h3>Deep Personalization</h3>
+            <h3>Settings</h3>
             <p>
-              Multiple themes, four font categories, custom CSS, text transforms,
-              guided mode prompts, and a plugin system. Configure summarization
-              thresholds, context limits, model temperatures &mdash; per role,
-              per provider.
+              Dark mode, light mode, high contrast. Four font slots you can swap.
+              Custom CSS if you want it. Text transforms, plugins, per-role model
+              selection, temperature controls. Most things you'd want to tweak
+              are exposed.
             </p>
           </div>
           <div class="feature-img">
@@ -1042,7 +1042,7 @@
   <section style="background: var(--warm-white); padding: 4rem 0;">
     <div class="section-inner fade-in" style="padding: 0 2rem;">
       <p class="section-label">Gallery</p>
-      <h2 class="section-title">Every angle</h2>
+      <h2 class="section-title">More screenshots</h2>
     </div>
     <div class="gallery-strip fade-in" style="padding-left: 2rem; margin-top: 1.5rem;">
       <img src="screenshots/01-homepage.png" alt="Story gallery">
@@ -1067,22 +1067,22 @@
         <div class="step">
           <div class="step-num">1</div>
           <h3>Download &amp; Run</h3>
-          <p>Single binary. No install, no database. Just run it and open localhost:7739.</p>
+          <p>One binary. Run it. Open localhost:7739.</p>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <h3>Add a Provider</h3>
-          <p>Connect any OpenAI-compatible API. DeepSeek, OpenRouter, local models &mdash; your choice.</p>
+          <p>Paste in an API key from any OpenAI-compatible provider. DeepSeek, OpenRouter, local stuff, whatever.</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <h3>Create a Story</h3>
-          <p>Add characters, knowledge, and guidelines. Or import a SillyTavern card to bootstrap instantly.</p>
+          <p>Add characters, lore, and guidelines. Or drag in a SillyTavern character card.</p>
         </div>
         <div class="step">
           <div class="step-num">4</div>
           <h3>Write</h3>
-          <p>Prompt the model, edit the output, branch timelines. The librarian tracks everything in the background.</p>
+          <p>Write a prompt, get prose, edit it, keep going. The librarian watches in the background.</p>
         </div>
       </div>
     </div>
@@ -1187,7 +1187,7 @@
     <div class="section-inner">
       <div class="fade-in">
         <p class="section-label">Under the Hood</p>
-        <h2 class="section-title">Built with care</h2>
+        <h2 class="section-title">Stack</h2>
       </div>
       <div class="tech-grid fade-in">
         <div class="tech-item">
@@ -1230,10 +1230,10 @@
   <section class="cta">
     <div class="cta-bg"></div>
     <div class="cta-content fade-in">
-      <h2 class="serif">Start writing with memory</h2>
+      <h2 class="serif">Give it a try</h2>
       <p>
-        Download Errata, connect your model, and let your stories
-        build worlds that persist.
+        Download it, plug in a provider, start a story.
+        It's free and it runs on your machine.
       </p>
       <div class="hero-actions">
         <a href="https://github.com/tealios/errata" class="btn btn-primary">
@@ -1250,7 +1250,7 @@
     <p>
       Built by <a href="https://github.com/tealios">Tealios</a> &middot;
       Errata is open source &middot;
-      Powered by whatever model you bring
+      Bring your own model
     </p>
   </footer>
 
