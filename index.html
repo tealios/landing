@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Errata — AI-Assisted Fiction Writing</title>
+  <meta name="description" content="A local-first creative writing tool with AI memory, character tracking, and branching timelines. Write stories that remember themselves.">
+  <link rel="icon" href="/ErrataLogo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --peach: #E8C9A0;
+      --peach-light: #F5E6D0;
+      --peach-pale: #FBF3EA;
+      --ink: #1a1a1a;
+      --ink-soft: #3a3a3a;
+      --ink-muted: #777;
+      --cream: #FFFBF5;
+      --warm-white: #FFF9F2;
+      --accent: #c4956a;
+      --accent-dark: #a07850;
+      --sage: #8B9E7E;
+      --sage-light: #E8EFE4;
+      --rose: #C48B8B;
+      --rose-light: #F2E0E0;
+      --lavender: #9B8EC4;
+      --lavender-light: #E8E4F2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .serif { font-family: 'Instrument Serif', Georgia, serif; }
+    .prose-font { font-family: 'Newsreader', Georgia, serif; }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 251, 245, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(232, 201, 160, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      padding: 0.7rem 2rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+    }
+
+    .nav-logo span {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    .nav-cta {
+      background: var(--ink) !important;
+      color: var(--cream) !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      font-weight: 500 !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero-bg .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .hero-bg .blob-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--peach);
+      top: -10%;
+      right: -10%;
+      animation-delay: 0s;
+    }
+
+    .hero-bg .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--peach-light);
+      bottom: -5%;
+      left: -5%;
+      animation-delay: -7s;
+    }
+
+    .hero-bg .blob-3 {
+      width: 300px;
+      height: 300px;
+      background: var(--sage-light);
+      top: 30%;
+      left: 20%;
+      animation-delay: -14s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero-logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 2rem;
+      animation: fadeUp 1s ease-out;
+      filter: drop-shadow(0 4px 20px rgba(232, 201, 160, 0.4));
+    }
+
+    .hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1s ease-out 0.15s both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent-dark);
+    }
+
+    .hero-sub {
+      font-family: 'Newsreader', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--ink-soft);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      animation: fadeUp 1s ease-out 0.3s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 1s ease-out 0.45s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.25s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--peach);
+    }
+
+    .btn-secondary:hover {
+      background: var(--peach-pale);
+      border-color: var(--accent);
+    }
+
+    .hero-version {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      animation: fadeUp 1s ease-out 0.6s both;
+    }
+
+    .hero-version code {
+      background: var(--peach-light);
+      padding: 0.15em 0.5em;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- SCREENSHOT SHOWCASE ---- */
+    .showcase {
+      padding: 2rem 2rem 6rem;
+      position: relative;
+    }
+
+    .showcase-frame {
+      max-width: 1200px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow:
+        0 4px 6px rgba(0,0,0,0.04),
+        0 20px 60px rgba(0,0,0,0.1),
+        0 0 0 1px rgba(0,0,0,0.06);
+      animation: fadeUp 1s ease-out 0.7s both;
+    }
+
+    .showcase-frame img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ---- SECTION LAYOUT ---- */
+    section {
+      padding: 6rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      font-family: 'Newsreader', serif;
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      max-width: 640px;
+    }
+
+    /* ---- WHAT IS ERRATA ---- */
+    .what-is {
+      background: var(--warm-white);
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .pillar {
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(232, 201, 160, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .pillar:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+    }
+
+    .pillar-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      font-size: 1.5rem;
+    }
+
+    .pillar-icon.peach { background: var(--peach-light); }
+    .pillar-icon.sage { background: var(--sage-light); }
+    .pillar-icon.rose { background: var(--rose-light); }
+    .pillar-icon.lavender { background: var(--lavender-light); }
+
+    .pillar h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .pillar p {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    /* ---- FEATURE CARDS ---- */
+    .features {
+      background: var(--cream);
+    }
+
+    .feature-grid {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    .feature-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .feature-card:nth-child(even) {
+      direction: rtl;
+    }
+
+    .feature-card:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .feature-text .feature-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .tag-peach { background: var(--peach-light); color: var(--accent-dark); }
+    .tag-sage { background: var(--sage-light); color: #5a6e50; }
+    .tag-rose { background: var(--rose-light); color: #8a5555; }
+    .tag-lavender { background: var(--lavender-light); color: #6a5e8a; }
+
+    .feature-text h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-text p {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+
+    .feature-img {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    .feature-img img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ---- HOW IT WORKS ---- */
+    .how-it-works {
+      background: var(--warm-white);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .step {
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .step-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3rem;
+      color: var(--peach);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    .step-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--peach);
+      font-size: 1.5rem;
+    }
+
+    /* ---- RELEASE TIMELINE ---- */
+    .releases {
+      background: var(--cream);
+    }
+
+    .timeline {
+      margin-top: 3rem;
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--peach), var(--peach-light));
+      border-radius: 1px;
+    }
+
+    .release {
+      position: relative;
+      padding: 0 0 2.5rem 2rem;
+    }
+
+    .release:last-child { padding-bottom: 0; }
+
+    .release::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--cream);
+      border: 3px solid var(--peach);
+    }
+
+    .release:first-child::before {
+      background: var(--peach);
+      border-color: var(--accent);
+    }
+
+    .release-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .release-version {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .release-date {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    .release-notes {
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .release-notes li {
+      margin-bottom: 0.25rem;
+      margin-left: 1rem;
+    }
+
+    /* ---- TECH STACK ---- */
+    .tech {
+      background: var(--warm-white);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid rgba(232, 201, 160, 0.2);
+    }
+
+    .tech-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--peach-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .tech-item strong {
+      font-size: 0.95rem;
+      display: block;
+    }
+
+    .tech-item span {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    /* ---- CTA ---- */
+    .cta {
+      text-align: center;
+      padding: 8rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--peach-pale) 0%, var(--cream) 50%, var(--sage-light) 100%);
+      z-index: 0;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .cta p {
+      font-family: 'Newsreader', serif;
+      font-size: 1.2rem;
+      color: var(--ink-soft);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(232, 201, 160, 0.3);
+      background: var(--cream);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+    }
+
+    footer a {
+      color: var(--accent-dark);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 900px) {
+      .feature-card {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .feature-card:nth-child(even) { direction: ltr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .step-arrow { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0.75rem 1rem; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .hero { padding: 6rem 1.5rem 3rem; }
+      .hero h1 { font-size: 2.5rem; }
+      section { padding: 4rem 1.5rem; }
+      .steps { grid-template-columns: 1fr; }
+      .pillars { grid-template-columns: 1fr; }
+    }
+
+    /* ---- SCROLL ANIMATIONS ---- */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---- GALLERY STRIP ---- */
+    .gallery-strip {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding: 2rem 0;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .gallery-strip::-webkit-scrollbar { display: none; }
+
+    .gallery-strip img {
+      height: 300px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+
+    /* ---- LIGHTBOX ---- */
+    .lightbox-img { cursor: zoom-in; }
+
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      cursor: zoom-out;
+    }
+
+    .lightbox-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .lightbox-overlay.open img {
+      transform: scale(1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-nav:hover { background: rgba(255,255,255,0.25); }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.7);
+      font-size: 0.85rem;
+      text-align: center;
+      max-width: 500px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">
+      <img src="/ErrataLogo.png" alt="Errata">
+      <span class="serif">errata</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#releases">Releases</a>
+      <a href="https://github.com/tealios/errata" class="nav-cta">Get Errata</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <img src="/ErrataLogo.png" alt="Errata" class="hero-logo">
+      <h1>Stories that <em>remember</em> themselves</h1>
+      <p class="hero-sub">
+        An AI-assisted fiction writing tool with living memory, character tracking,
+        branching timelines, and a librarian that never forgets.
+      </p>
+      <div class="hero-actions">
+        <a href="https://github.com/tealios/errata" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </a>
+        <a href="#features" class="btn btn-secondary">See Features</a>
+      </div>
+      <p class="hero-version">
+        Latest: <code>v1.7.0</code> &middot; Local-first &middot; Runs on Bun &middot; No database required
+      </p>
+    </div>
+  </section>
+
+  <!-- HERO SCREENSHOT -->
+  <div class="showcase">
+    <div class="showcase-frame fade-in">
+      <img src="screenshots/02-full-app.png" alt="Errata — full writing interface with sidebar, prose chain, and outline panel">
+    </div>
+  </div>
+
+  <!-- WHAT IS ERRATA -->
+  <section class="what-is" id="about">
+    <div class="section-inner">
+      <div class="fade-in">
+        <p class="section-label">What is Errata</p>
+        <h2 class="section-title">Your world, remembered</h2>
+        <p class="section-desc">
+          Errata is a local-first creative writing application where AI doesn't just generate prose&hairsp;&mdash;&hairsp;it
+          understands your world. Characters, lore, timelines, and story arcs live as structured
+          fragments that the AI reads, references, and evolves as your story grows.
+        </p>
+      </div>
+      <div class="pillars fade-in">
+        <div class="pillar">
+          <div class="pillar-icon peach">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-dark)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <h3>Fragment System</h3>
+          <p>Characters, knowledge, guidelines, and prose are versioned fragments. Compose them into context however you want &mdash; the AI sees exactly what matters.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon sage">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5a6e50" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <h3>Living Librarian</h3>
+          <p>A background AI agent that analyzes every passage, tracks character mentions, detects contradictions, and suggests new fragments to keep your world consistent.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon rose">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a5555" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>Branching Timelines</h3>
+          <p>Explore "what if" without losing anything. Branch your story, try different paths, and switch between timelines. Every version is preserved.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon lavender">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6a5e8a" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Fully Local</h3>
+          <p>Single binary, no database, no cloud dependency. Your stories live on your filesystem. Bring your own LLM provider &mdash; any OpenAI-compatible API works.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-inner">
+      <div class="fade-in">
+        <p class="section-label">Features</p>
+        <h2 class="section-title">Everything a writer needs</h2>
+      </div>
+
+      <div class="feature-grid">
+        <!-- Feature 1: Prose Chain -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-peach">Writing</span>
+            <h3>Prose Chain with AI Generation</h3>
+            <p>
+              Write in Freeform, Guided, or Compose mode. Each passage gets a prompt
+              and the AI generates prose that flows naturally from your existing story.
+              Reorder, branch, and edit with a rich Tiptap editor. The context window
+              is assembled from your fragments &mdash; not just raw text.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/16-prose-clean.png" alt="Prose chain with generated passages">
+          </div>
+        </div>
+
+        <!-- Feature 2: Characters -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-sage">Fragments</span>
+            <h3>Characters, Lore &amp; Knowledge</h3>
+            <p>
+              Define characters with markdown content, track version history,
+              freeze critical text, and let the librarian auto-update fragments
+              as your story evolves. Import SillyTavern character cards,
+              or build your world from scratch.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/04-fragment-editor.png" alt="Character fragment editor with version history">
+          </div>
+        </div>
+
+        <!-- Feature 3: Librarian -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-rose">Memory</span>
+            <h3>The Librarian Never Forgets</h3>
+            <p>
+              After each generation, a background agent analyzes your prose:
+              tracking character mentions, detecting contradictions, building
+              timelines, and suggesting new fragments. Chat with it to ask
+              about your world. It sees everything.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/07-librarian-analyses.png" alt="Librarian analysis with character tracking and timeline">
+          </div>
+        </div>
+
+        <!-- Feature 4: Agents -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-lavender">Control</span>
+            <h3>Configurable Agent Blocks</h3>
+            <p>
+              Advanced mode lets you configure exactly what the AI sees. Build
+              context from ordered blocks: system prompts, fragments, summaries,
+              and script blocks that run custom logic. Choose different models
+              for generation, chat, librarian, and directions.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/09-agents.png" alt="Agent configuration with block-based context assembly">
+          </div>
+        </div>
+
+        <!-- Feature 5: Timelines -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-peach">Exploration</span>
+            <h3>Branching Timelines</h3>
+            <p>
+              Fork your story at any point. Each timeline gets its own prose chain,
+              fragments, and librarian history &mdash; fully isolated. Switch between
+              branches instantly and merge ideas when you're ready.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/15-timelines.png" alt="Timeline management panel">
+          </div>
+        </div>
+
+        <!-- Feature 6: Settings -->
+        <div class="feature-card fade-in">
+          <div class="feature-text">
+            <span class="feature-tag tag-sage">Customization</span>
+            <h3>Deep Personalization</h3>
+            <p>
+              Multiple themes, four font categories, custom CSS, text transforms,
+              guided mode prompts, and a plugin system. Configure summarization
+              thresholds, context limits, model temperatures &mdash; per role,
+              per provider.
+            </p>
+          </div>
+          <div class="feature-img">
+            <img src="screenshots/10-settings.png" alt="Extensive settings panel with typography, themes, and model configuration">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOT GALLERY -->
+  <section style="background: var(--warm-white); padding: 4rem 0;">
+    <div class="section-inner fade-in" style="padding: 0 2rem;">
+      <p class="section-label">Gallery</p>
+      <h2 class="section-title">Every angle</h2>
+    </div>
+    <div class="gallery-strip fade-in" style="padding-left: 2rem; margin-top: 1.5rem;">
+      <img src="screenshots/01-homepage.png" alt="Story gallery">
+      <img src="screenshots/03-characters.png" alt="Characters panel">
+      <img src="screenshots/05-knowledge.png" alt="Knowledge fragments">
+      <img src="screenshots/06-librarian.png" alt="Librarian chat">
+      <img src="screenshots/08-analysis-expanded.png" alt="Expanded analysis">
+      <img src="screenshots/12-guided-mode.png" alt="Guided writing mode">
+      <img src="screenshots/14-fragment-order.png" alt="Fragment ordering">
+      <img src="screenshots/17-character-chat.png" alt="Character chat">
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-inner">
+      <div class="fade-in">
+        <p class="section-label">How It Works</p>
+        <h2 class="section-title">From download to first chapter</h2>
+      </div>
+      <div class="steps fade-in">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Download &amp; Run</h3>
+          <p>Single binary. No install, no database. Just run it and open localhost:7739.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Add a Provider</h3>
+          <p>Connect any OpenAI-compatible API. DeepSeek, OpenRouter, local models &mdash; your choice.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Create a Story</h3>
+          <p>Add characters, knowledge, and guidelines. Or import a SillyTavern card to bootstrap instantly.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Write</h3>
+          <p>Prompt the AI, edit the output, branch timelines. The librarian tracks everything in the background.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELEASES -->
+  <section class="releases" id="releases">
+    <div class="section-inner">
+      <div class="fade-in">
+        <p class="section-label">Changelog</p>
+        <h2 class="section-title">Changelog</h2>
+      </div>
+      <div class="timeline fade-in">
+        <div class="release">
+          <div class="release-header">
+            <span class="release-version">v1.7.0</span>
+            <span class="release-date">Feb 20, 2026</span>
+          </div>
+          <div class="release-notes">
+            <ul>
+              <li>Script block preview with fragment references</li>
+              <li>Abort support and guided direction mode</li>
+              <li>Animated wisp agent indicator</li>
+              <li>Agent block system for centralized context assembly</li>
+              <li>Per-role model selection with fallback chains</li>
+              <li>Story cover images with gallery grid</li>
+            </ul>
+          </div>
+        </div>
+        <div class="release">
+          <div class="release-header">
+            <span class="release-version">v1.6.0</span>
+            <span class="release-date">Feb 19, 2026</span>
+          </div>
+          <div class="release-notes">
+            <ul>
+              <li>Character chat with in-character conversations</li>
+              <li>Prose writing panel with context strips</li>
+              <li>Librarian-powered selection transforms</li>
+              <li>LLM summary compaction</li>
+            </ul>
+          </div>
+        </div>
+        <div class="release">
+          <div class="release-header">
+            <span class="release-version">v1.5.0</span>
+            <span class="release-date">Feb 19, 2026</span>
+          </div>
+          <div class="release-notes">
+            <ul>
+              <li>SillyTavern character card import (JSON, PNG, URL)</li>
+              <li>Universal import dialog with drag-and-drop</li>
+              <li>Hierarchical summaries and prose edit reanalysis</li>
+              <li>Analysis deduplication</li>
+            </ul>
+          </div>
+        </div>
+        <div class="release">
+          <div class="release-header">
+            <span class="release-version">v1.3.0</span>
+            <span class="release-date">Feb 19, 2026</span>
+          </div>
+          <div class="release-notes">
+            <ul>
+              <li>Fragment ordering and advanced context control</li>
+              <li>Plugin system with color-picker, diceroll, keybinds, names</li>
+            </ul>
+          </div>
+        </div>
+        <div class="release">
+          <div class="release-header">
+            <span class="release-version">v1.2.0</span>
+            <span class="release-date">Feb 18, 2026</span>
+          </div>
+          <div class="release-notes">
+            <ul>
+              <li>Branch-aware storage with AsyncLocalStorage pinning</li>
+              <li>Timeline tabs and manager panel</li>
+              <li>Redesigned prose prompt header with model quick-switch</li>
+            </ul>
+          </div>
+        </div>
+        <div class="release">
+          <div class="release-header">
+            <span class="release-version">v1.0.0</span>
+            <span class="release-date">Feb 17, 2026</span>
+          </div>
+          <div class="release-notes">
+            <ul>
+              <li>Initial release: prose chain, fragments, librarian, settings</li>
+              <li>Bring-your-own-provider model configuration</li>
+              <li>Export/import story archives</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section class="tech">
+    <div class="section-inner">
+      <div class="fade-in">
+        <p class="section-label">Under the Hood</p>
+        <h2 class="section-title">Built with care</h2>
+      </div>
+      <div class="tech-grid fade-in">
+        <div class="tech-item">
+          <div class="tech-icon">&#x1F9CA;</div>
+          <div><strong>Bun</strong><span>Runtime &amp; single-binary bundler</span></div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">&#x269B;</div>
+          <div><strong>React 19</strong><span>UI with TanStack Start</span></div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">&#x1F3A8;</div>
+          <div><strong>Tailwind CSS</strong><span>Utility-first styling</span></div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">&#x270F;</div>
+          <div><strong>Tiptap</strong><span>Rich text prose editor</span></div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">&#x1F680;</div>
+          <div><strong>Elysia</strong><span>Backend API framework</span></div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">&#x1F916;</div>
+          <div><strong>Vercel AI SDK</strong><span>LLM streaming &amp; tools</span></div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">&#x1F4C1;</div>
+          <div><strong>Filesystem</strong><span>No database &mdash; just JSON</span></div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">&#x1F50C;</div>
+          <div><strong>Any LLM</strong><span>OpenAI-compatible providers</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-content fade-in">
+      <h2 class="serif">Start writing with memory</h2>
+      <p>
+        Download Errata, connect your LLM, and let your stories
+        build worlds that persist.
+      </p>
+      <div class="hero-actions">
+        <a href="https://github.com/tealios/errata" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          View on GitHub
+        </a>
+        <a href="https://github.com/tealios/errata/releases" class="btn btn-secondary">All Releases</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      Built by <a href="https://github.com/tealios">Tealios</a> &middot;
+      Errata is open source &middot;
+      Powered by whatever LLM you bring
+    </p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" aria-label="Previous">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" aria-label="Next">&#8250;</button>
+    <img src="" alt="">
+    <div class="lightbox-caption"></div>
+  </div>
+
+  <script>
+    // Scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Lightbox
+    (() => {
+      const overlay = document.getElementById('lightbox');
+      const lbImg = overlay.querySelector('img');
+      const lbCaption = overlay.querySelector('.lightbox-caption');
+      const btnClose = overlay.querySelector('.lightbox-close');
+      const btnPrev = overlay.querySelector('.lightbox-prev');
+      const btnNext = overlay.querySelector('.lightbox-next');
+
+      // Collect all lightbox-able images
+      const imgs = [...document.querySelectorAll('.showcase-frame img, .feature-img img, .gallery-strip img')];
+      imgs.forEach(img => img.classList.add('lightbox-img'));
+
+      let currentIndex = -1;
+
+      function open(index) {
+        currentIndex = index;
+        const img = imgs[index];
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        lbCaption.textContent = img.alt || '';
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+        currentIndex = -1;
+      }
+
+      function prev() {
+        if (currentIndex > 0) open(currentIndex - 1);
+        else open(imgs.length - 1);
+      }
+
+      function next() {
+        if (currentIndex < imgs.length - 1) open(currentIndex + 1);
+        else open(0);
+      }
+
+      imgs.forEach((img, i) => {
+        img.addEventListener('click', (e) => {
+          e.preventDefault();
+          open(i);
+        });
+      });
+
+      btnClose.addEventListener('click', close);
+      btnPrev.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+      btnNext.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (currentIndex === -1) return;
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowLeft') prev();
+        if (e.key === 'ArrowRight') next();
+      });
+    })();
+  </script>
+</body>
+</html>
