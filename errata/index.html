@@ -295,6 +295,59 @@
     }
     .source .label { padding-top: 0.4rem; }
 
+    /* hero shot + thumbnail figures */
+    .hero-img { border-bottom: 1px solid var(--rule); display: block; }
+    .hero-img img {
+      display: block; width: 100%; height: auto;
+      border-bottom: 1px solid var(--hairline);
+      background: var(--paper-2);
+    }
+    .hero-img figcaption {
+      display: flex; justify-content: space-between;
+      padding: 0.7rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .hero-img figcaption b { color: var(--ink); font-weight: 400; }
+
+    .views { border-bottom: 1px solid var(--rule); }
+    .views-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .views-grid { display: grid; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .views-grid { grid-template-columns: repeat(3, 1fr); } }
+    .view {
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper);
+    }
+    .view:last-child { border-right: 0; border-bottom: 0; }
+    @media (min-width: 720px) {
+      .view:nth-child(3n) { border-right: 0; }
+      .view:nth-last-child(-n+3) { border-bottom: 0; }
+    }
+    @media (max-width: 720px) { .view { border-right: 0; } }
+    .view img {
+      display: block; width: 100%; height: auto;
+      background: var(--paper-2);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .view figcaption {
+      display: flex; justify-content: space-between;
+      padding: 0.55rem 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .view figcaption b { color: var(--ink); font-weight: 400; }
+
     footer {
       display: grid;
       grid-template-columns: auto 1fr auto;
@@ -346,6 +399,14 @@
     <div class="right">GPL-2.0 · 2026.06</div>
   </section>
 
+  <figure class="hero-img" aria-label="Main editor">
+    <img src="screenshots/02-full-app.png" alt="Errata main editor view with sidebar, prose chain, and outline panel" loading="eager">
+    <figcaption>
+      <span><b>FIG.01</b> · MAIN EDITOR</span>
+      <span>SCREENSHOT</span>
+    </figcaption>
+  </figure>
+
   <section class="specs" id="specs">
     <div class="specs-head">
       <span class="sk"><b>SPEC</b></span>
@@ -367,6 +428,39 @@
       <div class="spec-row"><dt>Platforms</dt><dd>Windows, Linux, macOS. Standalone binary, no runtime required.</dd></div>
       <div class="spec-row"><dt>License</dt><dd>GPL-2.0.</dd></div>
     </dl>
+  </section>
+
+  <section class="views" aria-label="Views">
+    <div class="views-head">
+      <span class="sk"><b>VIEWS</b></span>
+      <span class="sk">06 FIGURES</span>
+    </div>
+    <div class="views-grid">
+      <figure class="view">
+        <img src="screenshots/16-prose-clean.png" alt="Prose chain with generated passages" loading="lazy">
+        <figcaption><span><b>FIG.02</b></span><span>Prose chain</span></figcaption>
+      </figure>
+      <figure class="view">
+        <img src="screenshots/04-fragment-editor.png" alt="Character fragment editor with version history" loading="lazy">
+        <figcaption><span><b>FIG.03</b></span><span>Fragment editor</span></figcaption>
+      </figure>
+      <figure class="view">
+        <img src="screenshots/09-agents.png" alt="Agent configuration with block-based context" loading="lazy">
+        <figcaption><span><b>FIG.04</b></span><span>Block context</span></figcaption>
+      </figure>
+      <figure class="view">
+        <img src="screenshots/06-librarian.png" alt="Librarian analysis with character tracking" loading="lazy">
+        <figcaption><span><b>FIG.05</b></span><span>Librarian</span></figcaption>
+      </figure>
+      <figure class="view">
+        <img src="screenshots/17-character-chat.png" alt="Character chat conversation" loading="lazy">
+        <figcaption><span><b>FIG.06</b></span><span>Character chat</span></figcaption>
+      </figure>
+      <figure class="view">
+        <img src="screenshots/15-timelines.png" alt="Timeline management panel" loading="lazy">
+        <figcaption><span><b>FIG.07</b></span><span>Timelines</span></figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="env" id="env">
