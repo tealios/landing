@@ -107,15 +107,7 @@
       width: max-content;
       color: var(--ink);
     }
-    .wordmark .tdot {
-      display: inline-block;
-      width: 0.18em; height: 0.18em;
-      background: var(--accent);
-      border-radius: 50%;
-      vertical-align: 0.74em;
-      margin-left: -0.06em;
-      margin-right: 0.04em;
-    }
+    .wordmark .lit { color: var(--accent); }
     .plate-foot {
       margin-top: clamp(1.4rem, 3vw, 2rem);
       display: grid;
@@ -335,7 +327,7 @@
       <span class="sk-chip">TLOS-001 / UNIT</span>
       <span class="sk">REV. 2026.06</span>
     </div>
-    <h1 class="wordmark" aria-label="Tally">tall<span class="tdot" aria-hidden="true"></span></h1>
+    <h1 class="wordmark" aria-label="Tally">tall<span class="lit">y</span></h1>
     <div class="plate-foot">
       <div class="spec sk">TYPE<b>Wireless camera</b></div>
       <div class="spec sk">SENDER<b>Phone PWA</b></div>
