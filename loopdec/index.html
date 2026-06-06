@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoopDec · TLOS-002 — Tealios</title>
+  <meta name="description" content="YouTube loop sampler. Pad bank, waveform editor, on-disk session. Built by Tealios.">
+  <meta name="theme-color" content="#f6f4ec">
+  <meta property="og:title" content="LoopDec · TLOS-002 — Tealios">
+  <meta property="og:description" content="YouTube loop sampler. Pad bank, waveform editor, on-disk session.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tealios.com/loopdec/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:    oklch(0.972 0.008 100);
+      --paper-2:  oklch(0.945 0.010 102);
+      --paper-3:  oklch(0.91  0.012 102);
+
+      --ink:      oklch(0.17 0.012 210);
+      --ink-soft: oklch(0.42 0.012 208);
+      --ink-dim:  oklch(0.62 0.010 205);
+
+      --rule:     oklch(0.22 0.012 210);
+      --hairline: oklch(0.80 0.012 110);
+
+      --accent:        oklch(0.78 0.15 75);   /* amber LED */
+      --accent-soft:   oklch(0.85 0.12 78);
+      --on-accent:     oklch(0.18 0.02 60);
+
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-ui:      "Inter", system-ui, sans-serif;
+      --font-mono:    "Space Mono", ui-monospace, monospace;
+
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--paper); color: var(--ink); }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      line-height: 1.45;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--ink); color: var(--paper); }
+    img, button, input { border-radius: 0; }
+
+    .sk {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .sk b { color: var(--ink); font-weight: 400; }
+    .sk-chip {
+      display: inline-block;
+      padding: 0.2rem 0.4rem;
+      border: 1px solid var(--rule);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .silkscreen {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.2rem;
+      align-items: center;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper);
+    }
+    .silkscreen .mid { justify-self: center; color: var(--ink-soft); }
+    @media (max-width: 760px) {
+      .silkscreen { grid-template-columns: auto auto; }
+      .silkscreen .mid { display: none; }
+    }
+
+    .plate {
+      border-bottom: 1px solid var(--rule);
+      padding: clamp(2rem, 5vw, 4rem) 1rem clamp(2.5rem, 5vw, 4.5rem);
+    }
+    .plate-top {
+      display: flex; gap: 0.5rem; align-items: center;
+      margin-bottom: clamp(2rem, 5vw, 4rem);
+      flex-wrap: wrap;
+    }
+    .wordmark {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(4rem, 18vw, 18rem);
+      letter-spacing: -0.07em;
+      line-height: 0.86;
+      white-space: nowrap;
+      width: max-content;
+      color: var(--ink);
+    }
+    /* on loopdec, the first 'o' is replaced by an amber tally-dot at letter scale */
+    .wordmark .odot {
+      display: inline-block;
+      width: 0.62em; height: 0.62em;
+      background: var(--accent);
+      border-radius: 50%;
+      vertical-align: -0.04em;
+      margin: 0 -0.02em;
+    }
+    .plate-foot {
+      margin-top: clamp(1.4rem, 3vw, 2rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.5rem;
+      max-width: 64rem;
+    }
+    @media (min-width: 760px) {
+      .plate-foot { grid-template-columns: repeat(4, max-content); gap: 0 2rem; }
+    }
+    .spec {
+      border-top: 1px solid var(--rule);
+      padding-top: 0.55rem;
+    }
+    .spec b { display: block; color: var(--ink); font-weight: 500; font-size: 0.95rem; letter-spacing: -0.005em; margin-top: 0.1rem; font-family: var(--font-display); }
+
+    .band {
+      background: var(--accent);
+      color: var(--on-accent);
+      border-bottom: 1px solid var(--rule);
+      padding: clamp(2rem, 4vw, 3rem) 1rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    @media (min-width: 720px) {
+      .band { grid-template-columns: 1fr auto; align-items: end; }
+    }
+    .band .id {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+    .band h2 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(1.6rem, 3.6vw, 2.8rem);
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      max-width: 32ch;
+    }
+    .band .right {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .specs { border-bottom: 1px solid var(--rule); }
+    .specs-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 14rem 1fr;
+      gap: 1rem 2rem;
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--hairline);
+      align-items: baseline;
+    }
+    .spec-row:last-child { border-bottom: 0; }
+    .spec-row dt {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .spec-row dd {
+      font-family: var(--font-ui);
+      font-size: 0.98rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .spec-row dd code {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.08rem 0.32rem;
+      background: var(--paper-2);
+      border: 1px solid var(--hairline);
+      color: var(--ink);
+    }
+    @media (max-width: 720px) {
+      .spec-row { grid-template-columns: 1fr; gap: 0.3rem; padding: 0.95rem 1rem; }
+    }
+
+    /* keybindings table */
+    .keys {
+      border-bottom: 1px solid var(--rule);
+    }
+    .keys-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .keys-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+      .keys-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .kbd {
+      display: grid;
+      grid-template-columns: 10rem 1fr;
+      gap: 1rem 1.5rem;
+      align-items: center;
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--hairline);
+      border-right: 1px solid var(--hairline);
+    }
+    @media (min-width: 720px) {
+      .kbd:nth-child(odd):last-child { border-right: 1px solid var(--hairline); }
+      .kbd:nth-child(2n) { border-right: 0; }
+    }
+    @media (max-width: 720px) {
+      .kbd { border-right: 0; }
+    }
+    .kbd .k {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--ink);
+      padding: 0.15rem 0.45rem;
+      border: 1px solid var(--rule);
+      background: var(--paper-2);
+      width: max-content;
+    }
+    .kbd .a {
+      font-family: var(--font-ui);
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+    }
+
+    .source {
+      padding: clamp(2rem, 4vw, 3rem) 1rem;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 760px) {
+      .source { grid-template-columns: 14rem 1fr; gap: 2rem; align-items: start; }
+    }
+    .source pre {
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      padding: 0.9rem 1.1rem;
+      overflow-x: auto;
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    .source .label { padding-top: 0.4rem; }
+
+    footer {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.5rem 1.2rem;
+      align-items: center;
+      padding: 0.7rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    footer .center { justify-self: center; color: var(--ink-dim); }
+    footer a:hover { color: var(--ink); }
+    footer .right { display: flex; gap: 1.4rem; justify-self: end; flex-wrap: wrap; }
+    @media (max-width: 720px) {
+      footer { grid-template-columns: 1fr auto; }
+      footer .center { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="silkscreen">
+    <a class="sk" href="/">← <b>TEALIOS</b></a>
+    <span class="sk mid">TLOS-002 · LOOPDEC</span>
+    <a class="sk" href="https://github.com/tealios/loopdec">github →</a>
+  </header>
+
+  <section class="plate" aria-label="LoopDec">
+    <div class="plate-top">
+      <span class="sk-chip">TLOS-002 / UNIT</span>
+      <span class="sk">REV. 2026.06</span>
+    </div>
+    <h1 class="wordmark" aria-label="LoopDec">l<span class="odot" aria-hidden="true"></span>opdec</h1>
+    <div class="plate-foot">
+      <div class="spec sk">TYPE<b>Loop sampler</b></div>
+      <div class="spec sk">RUNTIME<b>Electron</b></div>
+      <div class="spec sk">AUDIO<b>Web Audio</b></div>
+      <div class="spec sk">SESSION<b>.dec file</b></div>
+    </div>
+  </section>
+
+  <section class="band" aria-label="Summary">
+    <div>
+      <div class="id">TLOS-002 · Description</div>
+      <h2>Drop YouTube URLs, chop them into a fixed pad bank, loop and layer in real time.</h2>
+    </div>
+    <div class="right">ISC · 2026.06</div>
+  </section>
+
+  <section class="specs" id="specs">
+    <div class="specs-head">
+      <span class="sk"><b>SPEC</b></span>
+      <span class="sk">10 ENTRIES</span>
+    </div>
+    <dl>
+      <div class="spec-row"><dt>Pad bank</dt><dd>4 × 3 default, up to 10 × 10. Drag to swap during playback.</dd></div>
+      <div class="spec-row"><dt>Waveform editor</dt><dd>Draggable in / out handles, snap-to-grid, zoom and pan.</dd></div>
+      <div class="spec-row"><dt>Audio engine</dt><dd>Web Audio, sample-accurate playback.</dd></div>
+      <div class="spec-row"><dt>Video sync</dt><dd>Drift detection between audio and video.</dd></div>
+      <div class="spec-row"><dt>Transport</dt><dd>Play all, stop all, sync-restart.</dd></div>
+      <div class="spec-row"><dt>Persistence</dt><dd><code>.dec</code> session files. Recent deck recall on launch.</dd></div>
+      <div class="spec-row"><dt>Binaries</dt><dd>Auto-managed <code>yt-dlp</code> and <code>ffmpeg</code>, with background refresh.</dd></div>
+      <div class="spec-row"><dt>Cache</dt><dd>LRU disk cache. Clips referenced by a deck are protected from eviction.</dd></div>
+      <div class="spec-row"><dt>Platforms</dt><dd>Windows, macOS, Linux. Node 22+.</dd></div>
+      <div class="spec-row"><dt>License</dt><dd>ISC.</dd></div>
+    </dl>
+  </section>
+
+  <section class="keys" id="keys">
+    <div class="keys-head">
+      <span class="sk"><b>KEYS</b></span>
+      <span class="sk">5 BINDINGS</span>
+    </div>
+    <div class="keys-grid">
+      <div class="kbd"><span class="k">⌘P · Ctrl+P</span><span class="a">Command palette</span></div>
+      <div class="kbd"><span class="k">Space</span><span class="a">Play / stop all enabled pads</span></div>
+      <div class="kbd"><span class="k">Esc</span><span class="a">Close open panel</span></div>
+      <div class="kbd"><span class="k">Scroll</span><span class="a">Zoom waveform</span></div>
+      <div class="kbd"><span class="k">Shift + Scroll</span><span class="a">Pan waveform</span></div>
+      <div class="kbd"><span class="k">PLY · ON · MUT · DUP · EDT · DEL</span><span class="a">Per-pad actions</span></div>
+    </div>
+  </section>
+
+  <section class="source" id="source">
+    <span class="sk label"><b>BUILD</b><br>FROM SOURCE</span>
+    <pre>git clone https://github.com/tealios/loopdec
+cd loopdec
+npm install
+npm start</pre>
+  </section>
+
+  <footer>
+    <span><b>SN.</b>2026.06.A · TLOS-002</span>
+    <span class="center"><a href="https://github.com/nokusukun">@nokusukun</a></span>
+    <span class="right">
+      <a href="mailto:tealios@onlypa.ws">tealios@onlypa.ws</a>
+      <a href="https://github.com/tealios/loopdec">repo</a>
+    </span>
+  </footer>
+
+</body>
+</html>
