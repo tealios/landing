@@ -5,570 +5,510 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tealios — local-first instruments for makers</title>
   <meta name="description" content="An independent studio making single-purpose, local-first creative tools. No accounts, no cloud, no telemetry.">
-  <meta name="theme-color" content="#121a1b">
+  <meta name="theme-color" content="#f6f4ec">
   <meta property="og:title" content="Tealios — local-first instruments for makers">
   <meta property="og:description" content="An independent studio making single-purpose, local-first creative tools. No accounts, no cloud, no telemetry.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tealios.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --signal:        oklch(0.72 0.13 195);
-      --signal-bright: oklch(0.82 0.14 192);
-      --signal-deep:   oklch(0.55 0.11 198);
+      /* TE-style off-white paper. tinted, never #fff */
+      --paper:    oklch(0.972 0.008 100);   /* warm cream */
+      --paper-2:  oklch(0.945 0.010 102);
+      --paper-3:  oklch(0.91  0.012 102);
 
-      --carbon:        oklch(0.21 0.012 210);
-      --carbon-raised: oklch(0.27 0.014 208);
-      --carbon-line:   oklch(0.34 0.014 208);
-      --carbon-deep:   oklch(0.16 0.01 210);
+      --ink:      oklch(0.17 0.012 210);    /* teal-tinted near-black */
+      --ink-soft: oklch(0.42 0.012 208);
+      --ink-dim:  oklch(0.62 0.010 205);
 
-      --ink:           oklch(0.93 0.006 200);
-      --ink-muted:     oklch(0.68 0.012 205);
-      --ink-dim:       oklch(0.50 0.012 208);
+      --rule:     oklch(0.22 0.012 210);
+      --hairline: oklch(0.80 0.012 110);
 
-      /* product accents (used as small panel accents, never takeovers) */
-      --tally-accent:   oklch(0.62 0.17 25);   /* broadcast red */
-      --loopdec-accent: oklch(0.78 0.14 75);   /* amber LED */
-      --errata-accent:  oklch(0.78 0.07 65);   /* warm peach */
+      /* solid utility chips — bold, flat, TE-style */
+      --c-signal: oklch(0.65 0.14 198);   /* TEALIOS house signal */
+      --c-tally:  oklch(0.60 0.20 26);    /* TLOS-001 broadcast red */
+      --c-loop:   oklch(0.78 0.15 75);    /* TLOS-002 amber LED */
+      --c-erra:   oklch(0.80 0.09 60);    /* TLOS-003 paper peach */
 
       --font-display: "Space Grotesk", system-ui, sans-serif;
-      --font-ui:      "Outfit", system-ui, sans-serif;
+      --font-ui:      "Inter", system-ui, sans-serif;
       --font-mono:    "Space Mono", ui-monospace, monospace;
 
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--paper); color: var(--ink); }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
       font-family: var(--font-ui);
-      background: var(--carbon);
-      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.45;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
-      line-height: 1.5;
-      overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
-    ::selection { background: var(--signal); color: var(--carbon); }
+    ::selection { background: var(--ink); color: var(--paper); }
+    img, button, input { border-radius: 0; }
 
-    /* faint instrument-grain background */
-    body::before {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, oklch(0.30 0.04 195 / 0.35), transparent 60%),
-        radial-gradient(900px 500px at 0% 100%, oklch(0.22 0.02 210 / 0.4), transparent 55%);
-      z-index: 0;
-    }
-    main, nav, footer { position: relative; z-index: 1; }
-
-    /* ─────────────────────────────────────────────── tally-dot */
-    .dot {
-      display: inline-block;
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      background: var(--signal);
-      box-shadow:
-        0 0 0 1px oklch(0.72 0.13 195 / 0.4),
-        0 0 14px 1px oklch(0.82 0.14 192 / 0.6);
-      vertical-align: 1px;
-    }
-    .dot.lg { width: 14px; height: 14px; box-shadow: 0 0 0 1px oklch(0.72 0.13 195 / 0.45), 0 0 22px 2px oklch(0.82 0.14 192 / 0.7); }
-    .dot[data-live] { animation: pulse 2.4s var(--ease-out) infinite; }
-    .dot.amber { background: var(--loopdec-accent); box-shadow: 0 0 0 1px oklch(0.78 0.14 75 / 0.4), 0 0 14px 1px oklch(0.85 0.16 78 / 0.6); }
-    .dot.red   { background: var(--tally-accent);   box-shadow: 0 0 0 1px oklch(0.62 0.17 25 / 0.4), 0 0 14px 1px oklch(0.72 0.19 25 / 0.6); }
-    .dot.peach { background: var(--errata-accent);  box-shadow: 0 0 0 1px oklch(0.78 0.07 65 / 0.4), 0 0 14px 1px oklch(0.85 0.09 65 / 0.55); }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%      { opacity: 0.55; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .dot[data-live] { animation: none; }
-    }
-
-    /* ─────────────────────────────────────────────── nav */
-    nav {
-      position: sticky; top: 0;
-      backdrop-filter: blur(14px);
-      background: oklch(0.21 0.012 210 / 0.7);
-      border-bottom: 1px solid var(--carbon-line);
-      padding: 0.9rem 1.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .brand {
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      font-family: var(--font-display);
-      font-weight: 500; font-size: 1.05rem;
-      letter-spacing: -0.01em;
-    }
-    .nav-links {
-      display: flex; gap: 1.5rem; align-items: center;
-      font-size: 0.875rem; color: var(--ink-muted);
-    }
-    .nav-links a { transition: color 0.18s var(--ease-out); }
-    .nav-links a:hover { color: var(--ink); }
-    .nav-links .gh {
-      font-family: var(--font-mono); font-size: 0.78rem;
-      color: var(--signal-bright);
-      border: 1px solid var(--carbon-line);
-      padding: 0.32rem 0.7rem; border-radius: 999px;
-    }
-    .nav-links .gh:hover { border-color: var(--signal-deep); }
-    @media (max-width: 600px) {
-      .nav-links a:not(.gh) { display: none; }
-    }
-
-    /* ─────────────────────────────────────────────── hero */
-    .hero {
-      padding: 8rem 1.5rem 5rem;
-      max-width: 1100px; margin: 0 auto;
-    }
-    .hero-mark {
-      display: inline-flex; align-items: center; gap: 0.9rem;
-      margin-bottom: 2.5rem;
-      padding: 0.55rem 0.95rem;
-      border: 1px solid var(--carbon-line);
-      border-radius: 999px;
-      background: var(--carbon-raised);
+    /* ───────────────── silkscreen labels (the TE silkscreen voice) ───── */
+    .sk {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--ink-muted);
+      color: var(--ink-soft);
     }
-    .hero-mark .dot { width: 7px; height: 7px; }
-    .hero h1 {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: clamp(2.5rem, 6.8vw, 5.4rem);
-      line-height: 1.02;
-      letter-spacing: -0.035em;
-      max-width: 16ch;
-      margin-bottom: 1.6rem;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--signal-bright);
-      position: relative;
-    }
-    .hero h1 em::after {
-      content: "";
+    .sk b { color: var(--ink); font-weight: 400; }
+    .sk-chip {
       display: inline-block;
-      width: 0.42em; height: 0.42em;
-      border-radius: 50%;
-      background: var(--signal);
-      margin-left: 0.18em;
-      vertical-align: 0.18em;
-      box-shadow:
-        0 0 0 1px oklch(0.72 0.13 195 / 0.45),
-        0 0 28px 2px oklch(0.82 0.14 192 / 0.7);
-      animation: pulse 2.4s var(--ease-out) infinite;
-    }
-    .hero p {
-      font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-      color: var(--ink-muted);
-      max-width: 58ch;
-      line-height: 1.55;
-    }
-    .hero p strong {
-      color: var(--ink);
-      font-weight: 500;
-    }
-
-    /* status readout strip */
-    .readout {
-      margin-top: 3rem;
-      display: inline-grid;
-      grid-auto-flow: column;
-      gap: 0;
+      padding: 0.2rem 0.4rem;
+      border: 1px solid var(--rule);
       font-family: var(--font-mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-      background: var(--carbon-deep);
-      border: 1px solid var(--carbon-line);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .readout > span {
-      padding: 0.55rem 1rem;
-      border-right: 1px solid var(--carbon-line);
-      display: inline-flex; align-items: center; gap: 0.55rem;
-    }
-    .readout > span:last-child { border-right: 0; }
-    .readout b { color: var(--signal-bright); font-weight: 400; }
-    @media (max-width: 640px) {
-      .readout {
-        grid-auto-flow: row;
-        font-size: 0.68rem;
-      }
-      .readout > span { border-right: 0; border-bottom: 1px solid var(--carbon-line); }
-      .readout > span:last-child { border-bottom: 0; }
-    }
-
-    /* ─────────────────────────────────────────────── instrument bay */
-    section.bay {
-      padding: 5rem 1.5rem 6rem;
-      max-width: 1100px; margin: 0 auto;
-    }
-    .label {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.62rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--ink-dim);
-      margin-bottom: 1.25rem;
-      display: inline-flex; align-items: center; gap: 0.55rem;
+      color: var(--ink);
     }
-    .bay-grid {
+
+    /* ───────────────── top silkscreen ─────────────────────────────────── */
+    .silkscreen {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.2rem;
+      align-items: center;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper);
+    }
+    .silkscreen .mid {
+      justify-self: center;
+      color: var(--ink-soft);
+    }
+    @media (max-width: 760px) {
+      .silkscreen { grid-template-columns: 1fr auto; }
+      .silkscreen .mid { display: none; }
+    }
+
+    /* ───────────────── hero / model plate ────────────────────────────── */
+    .plate {
+      border-bottom: 1px solid var(--rule);
+      padding: clamp(2rem, 5vw, 4rem) 1rem clamp(2.5rem, 5vw, 4.5rem);
+      position: relative;
+    }
+    .plate-top {
+      display: flex; gap: 0.5rem; align-items: center;
+      margin-bottom: clamp(2rem, 5vw, 4rem);
+      flex-wrap: wrap;
+    }
+    .wordmark {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(5rem, 22vw, 22rem);
+      letter-spacing: -0.07em;
+      line-height: 0.86;
+      white-space: nowrap;
+      width: max-content;
+      color: var(--ink);
+    }
+    .wordmark .tdot {
+      display: inline-block;
+      width: 0.18em; height: 0.18em;
+      background: var(--c-signal);
+      border-radius: 50%;
+      vertical-align: 0.74em;
+      margin-left: -0.06em;
+      margin-right: 0.04em;
+    }
+    .plate-foot {
+      margin-top: clamp(1.4rem, 3vw, 2rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.5rem;
+      max-width: 64rem;
+    }
+    @media (min-width: 760px) {
+      .plate-foot { grid-template-columns: repeat(4, max-content); gap: 0 2rem; }
+    }
+    .spec {
+      border-top: 1px solid var(--rule);
+      padding-top: 0.55rem;
+    }
+    .spec b { display: block; color: var(--ink); font-weight: 500; font-size: 0.95rem; letter-spacing: -0.005em; margin-top: 0.1rem; font-family: var(--font-display); }
+
+    /* ───────────────── color chip strip ──────────────────────────────── */
+    .chips {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--rule);
+    }
+    .chip {
+      position: relative;
+      aspect-ratio: 4 / 1;
+      min-height: 88px;
+      border-right: 1px solid var(--rule);
+      padding: 0.6rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .chip:last-child { border-right: 0; }
+    .chip[data-c="signal"] { background: var(--c-signal); color: var(--paper); }
+    .chip[data-c="tally"]  { background: var(--c-tally);  color: var(--paper); }
+    .chip[data-c="loop"]   { background: var(--c-loop);   color: var(--ink); }
+    .chip[data-c="erra"]   { background: var(--c-erra);   color: var(--ink); }
+    .chip .id {
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85;
+    }
+    .chip .nm {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1rem, 2.2vw, 1.6rem);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    @media (max-width: 640px) {
+      .chips { grid-template-columns: repeat(2, 1fr); }
+      .chip:nth-child(2) { border-right: 0; }
+      .chip:nth-child(1), .chip:nth-child(2) { border-bottom: 1px solid var(--rule); }
+    }
+
+    /* ───────────────── manifesto / the only rule ─────────────────────── */
+    .rule {
+      border-bottom: 1px solid var(--rule);
+      padding: clamp(3rem, 7vw, 6rem) 1rem clamp(3rem, 7vw, 6rem);
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.25rem;
+      gap: 1.5rem;
     }
-    @media (min-width: 800px) {
-      .bay-grid { grid-template-columns: 1.15fr 1fr 1fr; gap: 1.25rem; }
+    @media (min-width: 760px) {
+      .rule { grid-template-columns: 8rem 1fr; gap: 0 2rem; }
     }
-    .slot {
-      position: relative;
-      display: flex; flex-direction: column;
-      padding: 2rem 1.75rem 1.75rem;
-      border: 1px solid var(--carbon-line);
-      border-radius: 14px;
-      background: linear-gradient(180deg, var(--carbon-raised), var(--carbon-deep));
-      overflow: hidden;
-      transition: border-color 0.25s var(--ease-out), transform 0.25s var(--ease-out);
-      min-height: 320px;
-    }
-    .slot:hover {
-      border-color: oklch(0.42 0.04 200);
-      transform: translateY(-2px);
-    }
-    .slot::before {
-      content: "";
-      position: absolute; inset: 0 0 auto 0; height: 3px;
-      background: var(--slot-accent, var(--signal));
-      opacity: 0.85;
-    }
-    .slot-head {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.5rem;
-    }
-    .slot-id {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-    }
-    .slot-state {
-      display: inline-flex; align-items: center; gap: 0.45rem;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
-    }
-    .slot-name {
+    .rule .sk { align-self: start; padding-top: 0.5rem; }
+    .rule p {
       font-family: var(--font-display);
-      font-weight: 500;
-      font-size: 2.1rem;
-      letter-spacing: -0.025em;
-      line-height: 1;
-      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: clamp(2.3rem, 7vw, 6.5rem);
+      letter-spacing: -0.045em;
+      line-height: 0.95;
+      color: var(--ink);
+      max-width: 22ch;
     }
-    .slot-tag {
+    .rule p span { color: var(--ink-dim); font-weight: 500; }
+
+    /* ───────────────── bay / instruments (TE product-spec rows) ───── */
+    .bay-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .unit {
+      border-bottom: 1px solid var(--rule);
+      padding: clamp(1.6rem, 3.5vw, 2.6rem) 1rem clamp(1.6rem, 3.5vw, 2.6rem);
+      display: grid;
+      grid-template-columns: 12rem 1fr auto;
+      gap: 1rem 1.6rem;
+      align-items: center;
+      color: var(--ink);
+      transition: background-color 0.25s var(--ease-out);
+      position: relative;
+    }
+    .unit:hover { background: var(--paper-2); }
+    .unit:hover .nm-big { color: var(--ink); }
+    .unit:hover .arrow { transform: translateX(0.4rem); }
+
+    .unit-id {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .swatch {
+      width: 2.4rem; height: 2.4rem;
+      border: 1px solid var(--rule);
+      flex: 0 0 auto;
+    }
+    .swatch[data-c="tally"] { background: var(--c-tally); }
+    .swatch[data-c="loop"]  { background: var(--c-loop); }
+    .swatch[data-c="erra"]  { background: var(--c-erra); }
+    .unit-code .code {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); display: block;
+    }
+    .unit-code .typ {
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); margin-top: 0.15rem;
+    }
+
+    .unit-body .nm-big {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.6rem, 8vw, 6.5rem);
+      letter-spacing: -0.055em;
+      line-height: 0.9;
+      color: var(--ink);
+    }
+    .unit-body .tag {
+      font-family: var(--font-ui);
+      font-weight: 400;
+      font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+      color: var(--ink-soft);
+      margin-top: 0.45rem;
+      max-width: 44ch;
+      line-height: 1.45;
+    }
+    .unit-body .specline {
+      margin-top: 0.85rem;
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+    }
+    .unit-body .specline .sk-chip { background: var(--paper); }
+
+    .unit-link {
+      align-self: end;
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      color: var(--slot-accent, var(--signal-bright));
-      letter-spacing: 0.05em;
-      margin-bottom: 1.5rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding-bottom: 0.4rem;
     }
-    .slot-desc {
-      font-size: 0.98rem;
-      color: var(--ink-muted);
-      line-height: 1.55;
-      margin-bottom: auto;
+    .unit-link .arrow { display: inline-block; transition: transform 0.25s var(--ease-out); }
+
+    @media (max-width: 760px) {
+      .unit {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+        padding: 1.4rem 1rem 1.6rem;
+      }
+      .unit-id { gap: 0.6rem; }
+      .unit-link { align-self: start; padding-bottom: 0; }
+      .unit-body .nm-big { font-size: clamp(2.4rem, 12vw, 4rem); letter-spacing: -0.045em; }
+    }
+
+    /* ───────────────── studio / numbered rules ─────────────────────── */
+    .studio {
+      border-bottom: 1px solid var(--rule);
+      padding: clamp(2.5rem, 5vw, 4rem) 1rem clamp(2.5rem, 5vw, 4rem);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 840px) {
+      .studio { grid-template-columns: 12rem 1fr; gap: 0 3rem; }
+    }
+    .studio-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    @media (min-width: 720px) {
+      .studio-list { grid-template-columns: 1fr 1fr; gap: 1.5rem 3rem; }
+    }
+    .ru {
+      display: grid;
+      grid-template-columns: 4rem 1fr;
+      gap: 0.5rem 1rem;
+      align-items: baseline;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--rule);
+    }
+    .ru .n {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .ru h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.08rem;
+      letter-spacing: -0.012em;
+      color: var(--ink);
+    }
+    .ru p {
+      grid-column: 2;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-top: 0.3rem;
       max-width: 36ch;
     }
-    .slot-foot {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 1.75rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--carbon-line);
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      letter-spacing: 0.05em;
-    }
-    .slot-foot a {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      color: var(--ink);
-      transition: gap 0.2s var(--ease-out), color 0.2s var(--ease-out);
-    }
-    .slot-foot a:hover { gap: 0.7rem; color: var(--signal-bright); }
-    .slot-foot .meta {
-      color: var(--ink-dim);
-      font-size: 0.7rem;
-    }
 
-    .slot.tally    { --slot-accent: var(--tally-accent); }
-    .slot.loopdec  { --slot-accent: var(--loopdec-accent); }
-    .slot.errata   { --slot-accent: var(--errata-accent); }
-
-    /* ─────────────────────────────────────────────── convictions */
-    section.tenets {
-      padding: 4rem 1.5rem 5rem;
-      max-width: 1100px; margin: 0 auto;
-      border-top: 1px solid var(--carbon-line);
-    }
-    .tenets-head {
-      max-width: 50ch;
-      margin-bottom: 3rem;
-    }
-    .tenets-head h2 {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: clamp(1.6rem, 3.2vw, 2.3rem);
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin-bottom: 0.85rem;
-    }
-    .tenets-head p {
-      color: var(--ink-muted);
-      font-size: 1.02rem;
-      line-height: 1.6;
-    }
-    .tenets-list {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem 3rem;
-      counter-reset: tenet;
-    }
-    @media (min-width: 720px) {
-      .tenets-list { grid-template-columns: 1fr 1fr; }
-    }
-    .tenet {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.9rem 1.1rem;
-      align-items: baseline;
-      padding-top: 0.4rem;
-      border-top: 1px solid var(--carbon-line);
-    }
-    .tenet::before {
-      counter-increment: tenet;
-      content: "0" counter(tenet);
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      color: var(--signal-bright);
-    }
-    .tenet h3 {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: 1.08rem;
-      letter-spacing: -0.01em;
-    }
-    .tenet p {
-      grid-column: 2;
-      color: var(--ink-muted);
-      font-size: 0.95rem;
-      line-height: 1.55;
-      margin-top: 0.3rem;
-    }
-
-    /* ─────────────────────────────────────────────── footer */
+    /* ───────────────── footer plate ───────────────────────────────── */
     footer {
-      padding: 4rem 1.5rem 3rem;
-      border-top: 1px solid var(--carbon-line);
-      background: var(--carbon-deep);
-    }
-    .foot-inner {
-      max-width: 1100px;
-      margin: 0 auto;
       display: grid;
-      gap: 2.5rem;
-    }
-    @media (min-width: 720px) {
-      .foot-inner { grid-template-columns: 1fr auto; align-items: end; }
-    }
-    .badges {
-      display: flex; flex-wrap: wrap; gap: 0.55rem;
-    }
-    .badge {
-      display: inline-flex; align-items: center; gap: 0.45rem;
-      padding: 0.32rem 0.75rem;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.5rem 1.2rem;
+      align-items: center;
+      padding: 0.7rem 1rem;
       font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--signal-bright);
-      background: var(--carbon-raised);
-      border: 1px solid var(--carbon-line);
-      border-radius: 999px;
-      letter-spacing: 0.04em;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
     }
-    .badge .dot { width: 6px; height: 6px; box-shadow: 0 0 8px 1px oklch(0.82 0.14 192 / 0.6); }
-    .foot-meta {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--ink-dim);
-      letter-spacing: 0.06em;
-      line-height: 1.7;
-      text-align: right;
-    }
-    .foot-meta a { color: var(--ink-muted); }
-    .foot-meta a:hover { color: var(--signal-bright); }
+    footer .center { justify-self: center; color: var(--ink-dim); }
+    footer a:hover { color: var(--ink); }
+    footer .right { display: flex; gap: 1.4rem; justify-self: end; flex-wrap: wrap; }
     @media (max-width: 720px) {
-      .foot-meta { text-align: left; }
-    }
-    .foot-sig {
-      font-family: var(--font-display);
-      color: var(--ink);
-      font-size: 0.95rem;
-      letter-spacing: -0.01em;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      margin-bottom: 0.8rem;
+      footer { grid-template-columns: 1fr auto; }
+      footer .center { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <a class="brand" href="/">
-      <span class="dot" data-live></span>
-      tealios
-    </a>
-    <div class="nav-links">
-      <a href="#instruments">Instruments</a>
-      <a href="#about">Studio</a>
-      <a href="https://github.com/tealios" class="gh">github →</a>
+  <header class="silkscreen">
+    <span class="sk"><b>TLOS</b> · INDEPENDENT STUDIO · MOD.2026</span>
+    <span class="sk mid">NO ACCOUNTS · NO CLOUD · NO TELEMETRY</span>
+    <a class="sk" href="https://github.com/tealios">GITHUB.COM/TEALIOS →</a>
+  </header>
+
+  <section class="plate" aria-label="Tealios">
+    <div class="plate-top">
+      <span class="sk-chip">MOD.000 / STUDIO</span>
+      <span class="sk">REV. 2026.06</span>
     </div>
-  </nav>
+    <h1 class="wordmark" aria-label="Tealios">teal<span class="tdot" aria-hidden="true"></span>os</h1>
+    <div class="plate-foot">
+      <div class="spec sk">UNIT TYPE<b>Independent studio</b></div>
+      <div class="spec sk">UNITS SHIPPED<b>03 instruments</b></div>
+      <div class="spec sk">OPERATOR<b>01 maker</b></div>
+      <div class="spec sk">DELIVERY<b>Download &amp; run</b></div>
+    </div>
+  </section>
 
-  <main>
+  <section class="chips" aria-label="House palette">
+    <div class="chip" data-c="signal">
+      <span class="id">TLOS · Signal</span>
+      <span class="nm">Tealios</span>
+    </div>
+    <div class="chip" data-c="tally">
+      <span class="id">TLOS-001 · On-air</span>
+      <span class="nm">Tally</span>
+    </div>
+    <div class="chip" data-c="loop">
+      <span class="id">TLOS-002 · LED</span>
+      <span class="nm">LoopDec</span>
+    </div>
+    <div class="chip" data-c="erra">
+      <span class="id">TLOS-003 · Paper</span>
+      <span class="nm">Errata</span>
+    </div>
+  </section>
 
-    <section class="hero">
-      <span class="hero-mark"><span class="dot" data-live></span> independent software studio</span>
-      <h1>Local-first instruments<br>for <em>makers</em></h1>
-      <p>
-        Single-purpose tools you download, run, and own.
-        <strong>No accounts, no cloud, no telemetry.</strong>
-        Made by hand for a camera operator, a musician, a writer.
-      </p>
+  <section class="rule" aria-label="The only rule">
+    <span class="sk">RULE.01<br>THE ONLY ONE</span>
+    <p>Software you run, <span>not software that runs you.</span></p>
+  </section>
 
-      <div class="readout" aria-label="studio status">
-        <span><b>STUDIO</b> ONLINE</span>
-        <span><b>03</b> INSTRUMENTS</span>
-        <span><b>01</b> MAKER</span>
-        <span>BUILD <b>2026.06</b></span>
-      </div>
-    </section>
+  <section id="instruments">
+    <div class="bay-head">
+      <span class="sk"><b>BAY</b> · INSTRUMENTS</span>
+      <span class="sk">03 / 03 SHIPPED</span>
+    </div>
 
-    <section class="bay" id="instruments">
-      <div class="label"><span class="dot"></span> Instrument bay · three tools</div>
-      <div class="bay-grid">
-
-        <article class="slot tally">
-          <div class="slot-head">
-            <span class="slot-id">A1 · Tally</span>
-            <span class="slot-state"><span class="dot red" data-live></span> on-air</span>
-          </div>
-          <h2 class="slot-name">Tally</h2>
-          <div class="slot-tag">phone camera → browser</div>
-          <p class="slot-desc">
-            Turns a phone into a wireless camera for a desktop viewer. Pair by QR, stream over WebRTC, route into OBS. No app install, no cloud signaling.
-          </p>
-          <div class="slot-foot">
-            <a href="https://github.com/tealios/tally">open repo →</a>
-            <span class="meta">electron · pwa · webrtc</span>
-          </div>
-        </article>
-
-        <article class="slot loopdec">
-          <div class="slot-head">
-            <span class="slot-id">A2 · LoopDec</span>
-            <span class="slot-state"><span class="dot amber" data-live></span> loaded</span>
-          </div>
-          <h2 class="slot-name">LoopDec</h2>
-          <div class="slot-tag">youtube → pad bank</div>
-          <p class="slot-desc">
-            A personal YouTube loop sampler. Drop URLs, chop them into a fixed pad bank, loop and layer in real time. One user, headphones, no cloud.
-          </p>
-          <div class="slot-foot">
-            <a href="https://github.com/tealios/loopdec">open repo →</a>
-            <span class="meta">electron · web audio · ffmpeg</span>
-          </div>
-        </article>
-
-        <article class="slot errata">
-          <div class="slot-head">
-            <span class="slot-id">A3 · Errata</span>
-            <span class="slot-state"><span class="dot peach" data-live></span> writing</span>
-          </div>
-          <h2 class="slot-name">Errata</h2>
-          <div class="slot-tag">fiction writing with memory</div>
-          <p class="slot-desc">
-            A local writing tool that keeps track of your characters, lore, and plot. Branch timelines, chat with a librarian, write faster.
-          </p>
-          <div class="slot-foot">
-            <a href="/errata/">open page →</a>
-            <span class="meta">bun · react · elysia</span>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <section class="tenets" id="about">
-      <div class="tenets-head">
-        <div class="label"><span class="dot"></span> Studio</div>
-        <h2>The shape of a Tealios tool</h2>
-        <p>Three products, one set of convictions. These are the rules every Tealios instrument has to pass before it ships.</p>
-      </div>
-
-      <div class="tenets-list">
-        <div class="tenet">
-          <h3>Local-first, by conviction</h3>
-          <p>It runs on your machine and answers to you. No sign-up wall. Nothing phoning home. Your work stays where you put it.</p>
-        </div>
-        <div class="tenet">
-          <h3>Instruments, not apps</h3>
-          <p>Pads, LCDs, tally lights. Tools you operate, with status you can read at a glance. Built for hands, not dashboards.</p>
-        </div>
-        <div class="tenet">
-          <h3>Inspectable and honest</h3>
-          <p>Open code, plain words, scope you can actually see. If a model is in the loop, the prompt is in the loop too.</p>
-        </div>
-        <div class="tenet">
-          <h3>Made by a maker</h3>
-          <p>Solo-built, opinionated, uncluttered. The person who shipped it is the person you talk to when something breaks.</p>
+    <a class="unit" href="https://github.com/tealios/tally">
+      <div class="unit-id">
+        <div class="swatch" data-c="tally" aria-hidden="true"></div>
+        <div class="unit-code">
+          <span class="code">TLOS-001</span>
+          <span class="typ">Wireless camera</span>
         </div>
       </div>
-    </section>
+      <div class="unit-body">
+        <div class="nm-big">Tally</div>
+        <div class="tag">A phone, a desktop, and a wire that isn&rsquo;t there. Pair by QR, stream by WebRTC, route into OBS.</div>
+        <div class="specline">
+          <span class="sk-chip">Electron</span>
+          <span class="sk-chip">PWA</span>
+          <span class="sk-chip">WebRTC</span>
+          <span class="sk-chip">No install</span>
+        </div>
+      </div>
+      <div class="unit-link">Open repo <span class="arrow">→</span></div>
+    </a>
 
-  </main>
+    <a class="unit" href="https://github.com/tealios/loopdec">
+      <div class="unit-id">
+        <div class="swatch" data-c="loop" aria-hidden="true"></div>
+        <div class="unit-code">
+          <span class="code">TLOS-002</span>
+          <span class="typ">Loop sampler</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="nm-big">LoopDec</div>
+        <div class="tag">YouTube, chopped into a pad bank you can jam. Per-pad waveform editor, sample-accurate playback, all on disk.</div>
+        <div class="specline">
+          <span class="sk-chip">Electron</span>
+          <span class="sk-chip">Web Audio</span>
+          <span class="sk-chip">ffmpeg</span>
+          <span class="sk-chip">10×10 pads</span>
+        </div>
+      </div>
+      <div class="unit-link">Open repo <span class="arrow">→</span></div>
+    </a>
+
+    <a class="unit" href="/errata/">
+      <div class="unit-id">
+        <div class="swatch" data-c="erra" aria-hidden="true"></div>
+        <div class="unit-code">
+          <span class="code">TLOS-003</span>
+          <span class="typ">Writing app</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="nm-big">Errata</div>
+        <div class="tag">A local writing tool that keeps track of your characters, lore, and plot. Branch timelines, chat with a librarian, write faster.</div>
+        <div class="specline">
+          <span class="sk-chip">Bun</span>
+          <span class="sk-chip">React</span>
+          <span class="sk-chip">Elysia</span>
+          <span class="sk-chip">Fragment system</span>
+        </div>
+      </div>
+      <div class="unit-link">Open page <span class="arrow">→</span></div>
+    </a>
+  </section>
+
+  <section class="studio" id="studio" aria-label="Studio rules">
+    <div>
+      <span class="sk"><b>STUDIO</b><br>RULES.02–05</span>
+    </div>
+    <div class="studio-list">
+      <div class="ru">
+        <span class="n">02</span>
+        <h3>Local-first, by conviction</h3>
+        <p>It runs on your machine and answers to you. No sign-up wall. Nothing phoning home.</p>
+      </div>
+      <div class="ru">
+        <span class="n">03</span>
+        <h3>Instruments, not apps</h3>
+        <p>Pads, LCDs, tally lights. Tools you operate, with state you can read at a glance.</p>
+      </div>
+      <div class="ru">
+        <span class="n">04</span>
+        <h3>Inspectable and honest</h3>
+        <p>Open code, plain words, scope you can actually see. If a model is in the loop, the prompt is in the loop too.</p>
+      </div>
+      <div class="ru">
+        <span class="n">05</span>
+        <h3>Made by a maker</h3>
+        <p>Solo-built, opinionated, uncluttered. The person who shipped it is the person who answers.</p>
+      </div>
+    </div>
+  </section>
 
   <footer>
-    <div class="foot-inner">
-      <div>
-        <div class="foot-sig"><span class="dot" data-live></span> tealios</div>
-        <div class="badges">
-          <span class="badge"><span class="dot"></span> no accounts</span>
-          <span class="badge"><span class="dot"></span> no cloud</span>
-          <span class="badge"><span class="dot"></span> no telemetry</span>
-          <span class="badge"><span class="dot"></span> runs local</span>
-        </div>
-      </div>
-      <div class="foot-meta">
-        Made by <a href="https://github.com/nokusukun">@nokusukun</a><br>
-        <a href="https://github.com/tealios">github.com/tealios</a><br>
-        <a href="mailto:tealios@onlypa.ws">tealios@onlypa.ws</a>
-      </div>
-    </div>
+    <span><b>SN.</b>2026.06.A · TEALIOS</span>
+    <span class="center">made by hand · @nokusukun</span>
+    <span class="right">
+      <a href="mailto:tealios@onlypa.ws">tealios@onlypa.ws</a>
+      <a href="https://github.com/tealios">github</a>
+    </span>
   </footer>
 
 </body>
