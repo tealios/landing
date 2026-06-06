@@ -223,7 +223,7 @@
       border-right: 1px solid var(--hairline);
     }
     @media (min-width: 720px) {
-      .kbd:nth-child(odd):last-child { border-right: 1px solid var(--hairline); }
+      .kbd:nth-child(odd):last-child { grid-column: 1 / -1; border-right: 0; }
       .kbd:nth-child(2n) { border-right: 0; }
     }
     @media (max-width: 720px) {
@@ -324,13 +324,13 @@
     </div>
     <dl>
       <div class="spec-row"><dt>Pad bank</dt><dd>4 × 3 default, up to 10 × 10. Drag to swap during playback.</dd></div>
+      <div class="spec-row"><dt>Per-pad actions</dt><dd><code>PLY</code> <code>ON</code> <code>MUT</code> <code>DUP</code> <code>EDT</code> <code>DEL</code></dd></div>
       <div class="spec-row"><dt>Waveform editor</dt><dd>Draggable in / out handles, snap-to-grid, zoom and pan.</dd></div>
       <div class="spec-row"><dt>Audio engine</dt><dd>Web Audio, sample-accurate playback.</dd></div>
       <div class="spec-row"><dt>Video sync</dt><dd>Drift detection between audio and video.</dd></div>
       <div class="spec-row"><dt>Transport</dt><dd>Play all, stop all, sync-restart.</dd></div>
       <div class="spec-row"><dt>Persistence</dt><dd><code>.dec</code> session files. Recent deck recall on launch.</dd></div>
       <div class="spec-row"><dt>Binaries</dt><dd>Auto-managed <code>yt-dlp</code> and <code>ffmpeg</code>, with background refresh.</dd></div>
-      <div class="spec-row"><dt>Cache</dt><dd>LRU disk cache. Clips referenced by a deck are protected from eviction.</dd></div>
       <div class="spec-row"><dt>Platforms</dt><dd>Windows, macOS, Linux. Node 22+.</dd></div>
       <div class="spec-row"><dt>License</dt><dd>ISC.</dd></div>
     </dl>
@@ -347,7 +347,6 @@
       <div class="kbd"><span class="k">Esc</span><span class="a">Close open panel</span></div>
       <div class="kbd"><span class="k">Scroll</span><span class="a">Zoom waveform</span></div>
       <div class="kbd"><span class="k">Shift + Scroll</span><span class="a">Pan waveform</span></div>
-      <div class="kbd"><span class="k">PLY · ON · MUT · DUP · EDT · DEL</span><span class="a">Per-pad actions</span></div>
     </div>
   </section>
 
