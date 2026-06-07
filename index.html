@@ -99,7 +99,27 @@
       border-bottom: 1px solid var(--rule);
       padding: clamp(2rem, 5vw, 4rem) 1rem clamp(2.5rem, 5vw, 4.5rem);
       position: relative;
+      overflow: hidden;
+      isolation: isolate;
     }
+    .plate > .dither {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      opacity: 0;
+      animation: dither-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    }
+    @keyframes dither-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .plate > .plate-top,
+    .plate > .wordmark,
+    .plate > .plate-foot { position: relative; z-index: 1; }
     .plate-top {
       display: flex; gap: 0.5rem; align-items: center;
       margin-bottom: clamp(2rem, 5vw, 4rem);
@@ -397,6 +417,7 @@
   </header>
 
   <section class="plate" aria-label="Tealios">
+    <canvas class="dither" aria-hidden="true"></canvas>
     <div class="plate-top">
       <span class="sk-chip">MOD.000 / STUDIO</span>
       <span class="sk">REV. 2026.06</span>
@@ -560,6 +581,102 @@
             }, 200 + i * 100);
           });
         });
+      }
+
+      // Animated dithered gradient behind the wordmark (WebGL, low-res + pixelated upscale)
+      const canvas = document.querySelector('.plate > .dither');
+      if (canvas) {
+        const gl = canvas.getContext('webgl', { antialias: false, premultipliedAlpha: false })
+                || canvas.getContext('experimental-webgl');
+        if (gl) {
+          const vsrc = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+          const fsrc = `
+            precision highp float;
+            uniform vec2 u_res;
+            uniform float u_time;
+            float bayer(vec2 p){
+              int x=int(mod(p.x,4.));int y=int(mod(p.y,4.));int i=x+y*4;
+              if(i==0)return 0.0625;if(i==1)return 0.5625;if(i==2)return 0.1875;if(i==3)return 0.6875;
+              if(i==4)return 0.8125;if(i==5)return 0.3125;if(i==6)return 0.9375;if(i==7)return 0.4375;
+              if(i==8)return 0.25;  if(i==9)return 0.75;  if(i==10)return 0.125; if(i==11)return 0.625;
+              if(i==12)return 1.0;  if(i==13)return 0.5;  if(i==14)return 0.875; return 0.375;
+            }
+            void main(){
+              vec2 uv = gl_FragCoord.xy / u_res;
+              float t = u_time * 0.18;
+              float a = sin(uv.x*2.2 + t*0.7 + sin(uv.y*1.5 + t*0.35))*0.5+0.5;
+              float b = sin(uv.y*1.7 - t*0.55 + cos(uv.x*2.0 - t*0.4)*0.6)*0.5+0.5;
+              float c = sin((uv.x + uv.y*0.6) * 2.8 - t*0.9)*0.5+0.5;
+              float f = (a + b + c) * 0.3333;
+              f = pow(f, 1.35);
+              f = mix(0.05, 0.95, f);
+              float thr = (bayer(gl_FragCoord.xy) - 0.5) * 0.3333;
+              float q = clamp(f + thr, 0.0, 1.0);
+              vec3 c0 = vec3(0.971, 0.965, 0.940);  // cream
+              vec3 c1 = vec3(0.929, 0.918, 0.878);  // darker cream
+              vec3 c2 = vec3(0.660, 0.880, 0.880);  // pale teal
+              vec3 c3 = vec3(0.310, 0.740, 0.760);  // mid teal
+              vec3 col = c0;
+              if (q > 0.27) col = c1;
+              if (q > 0.55) col = c2;
+              if (q > 0.83) col = c3;
+              gl_FragColor = vec4(col, 1.0);
+            }
+          `;
+          const compile = (type, src) => {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, src);
+            gl.compileShader(s);
+            return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+          };
+          const vs = compile(gl.VERTEX_SHADER, vsrc);
+          const fs = compile(gl.FRAGMENT_SHADER, fsrc);
+          if (vs && fs) {
+            const prog = gl.createProgram();
+            gl.attachShader(prog, vs);
+            gl.attachShader(prog, fs);
+            gl.linkProgram(prog);
+            gl.useProgram(prog);
+            const buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+            const aPos = gl.getAttribLocation(prog, 'a');
+            gl.enableVertexAttribArray(aPos);
+            gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+            const uRes = gl.getUniformLocation(prog, 'u_res');
+            const uTime = gl.getUniformLocation(prog, 'u_time');
+
+            const sizeCanvas = () => {
+              const r = canvas.getBoundingClientRect();
+              const scale = 0.28; // low-res for crunchy pixels
+              canvas.width  = Math.max(80, Math.round(r.width  * scale));
+              canvas.height = Math.max(50, Math.round(r.height * scale));
+              gl.viewport(0, 0, canvas.width, canvas.height);
+            };
+            sizeCanvas();
+            if (window.ResizeObserver) {
+              new ResizeObserver(sizeCanvas).observe(canvas);
+            } else {
+              window.addEventListener('resize', sizeCanvas);
+            }
+
+            const t0 = performance.now();
+            const draw = (t) => {
+              gl.uniform2f(uRes, canvas.width, canvas.height);
+              gl.uniform1f(uTime, t);
+              gl.drawArrays(gl.TRIANGLES, 0, 3);
+            };
+            if (reduce) {
+              draw(8.0); // a pleasing static frame
+            } else {
+              const loop = (now) => {
+                draw((now - t0) / 1000);
+                requestAnimationFrame(loop);
+              };
+              requestAnimationFrame(loop);
+            }
+          }
+        }
       }
     })();
   </script>
