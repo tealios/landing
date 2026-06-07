@@ -603,38 +603,35 @@
             }
             void main(){
               vec2 uv = gl_FragCoord.xy / u_res;
-              float t = u_time * 0.13;
+              float t = u_time * 0.14;
 
-              // four product-hue fields, each with a different frequency and drift
-              float fNeon  = sin(uv.x*2.4 + uv.y*1.5 + t*0.85 + 0.0)*0.5 + 0.5;
-              float fAmber = sin(uv.x*1.6 - uv.y*1.9 - t*0.65 + 1.6)*0.5 + 0.5;
-              float fPeach = sin(uv.x*2.0 - uv.y*1.2 + t*0.55 + 3.2)*0.5 + 0.5;
-              float fRed   = sin(uv.x*1.3 + uv.y*2.2 - t*0.45 + 4.8)*0.5 + 0.5;
+              // three product-hue fields: amber, peach, red. no green.
+              float wAmber = pow(sin(uv.x*1.7 - uv.y*1.9 - t*0.65 + 1.6)*0.5 + 0.5, 1.5);
+              float wPeach = pow(sin(uv.x*2.1 - uv.y*1.2 + t*0.55 + 3.2)*0.5 + 0.5, 1.6);
+              float wRed   = pow(sin(uv.x*1.3 + uv.y*2.3 - t*0.50 + 4.8)*0.5 + 0.5, 2.2);
 
-              // gamma bias: which hue appears how often
-              fNeon  = pow(fNeon,  1.30);   // signal — most present
-              fAmber = pow(fAmber, 1.70);
-              fPeach = pow(fPeach, 1.80);
-              fRed   = pow(fRed,   2.40);   // rare, high-attention
+              // intensity = the strongest contribution at this pixel
+              float intensity = max(max(wAmber, wPeach), wRed);
 
-              // pick the dominant hue at this pixel
-              float maxF = max(max(fNeon, fAmber), max(fPeach, fRed));
-              vec3 hue;
-              if      (fNeon  == maxF) hue = vec3(0.374, 0.964, 0.323); // neon green
-              else if (fAmber == maxF) hue = vec3(0.936, 0.657, 0.191); // loopdec amber
-              else if (fPeach == maxF) hue = vec3(0.914, 0.691, 0.511); // errata peach
-              else                     hue = vec3(0.872, 0.234, 0.228); // tally red
+              // smooth-blended hue: softmax-style emphasis kills hard winner-take-all edges
+              float eAmber = pow(wAmber / max(intensity, 0.001), 4.0);
+              float ePeach = pow(wPeach / max(intensity, 0.001), 4.0);
+              float eRed   = pow(wRed   / max(intensity, 0.001), 4.0);
+              float total  = eAmber + ePeach + eRed + 0.001;
+              vec3 hue = (vec3(0.936, 0.657, 0.191) * eAmber +
+                          vec3(0.914, 0.691, 0.511) * ePeach +
+                          vec3(0.872, 0.234, 0.228) * eRed) / total;
 
-              // ordered dither, quantize through 3 steps: paper, paper-2, hue
-              float thr = (bayer(gl_FragCoord.xy) - 0.5) * (1.0/3.0);
-              float q   = clamp(maxF + thr, 0.0, 1.0);
+              // wider dither threshold for soft step transitions
+              float thr = (bayer(gl_FragCoord.xy) - 0.5) * 0.55;
+              float q   = clamp(intensity + thr, 0.0, 1.0);
 
               vec3 paper  = vec3(0.968, 0.965, 0.941);
               vec3 paper2 = vec3(0.933, 0.930, 0.901);
 
               vec3 col = paper;
-              if (q > 0.42) col = paper2;
-              if (q > 0.78) col = hue;
+              if (q > 0.40) col = paper2;
+              if (q > 0.75) col = hue;
               gl_FragColor = vec4(col, 1.0);
             }
           `;
@@ -663,9 +660,9 @@
 
             const sizeCanvas = () => {
               const r = canvas.getBoundingClientRect();
-              const scale = 0.28; // low-res for crunchy pixels
-              canvas.width  = Math.max(80, Math.round(r.width  * scale));
-              canvas.height = Math.max(50, Math.round(r.height * scale));
+              const scale = 0.42; // finer pixels — dither stays visible without hard edges
+              canvas.width  = Math.max(120, Math.round(r.width  * scale));
+              canvas.height = Math.max(70,  Math.round(r.height * scale));
               gl.viewport(0, 0, canvas.width, canvas.height);
             };
             sizeCanvas();
