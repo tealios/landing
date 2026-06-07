@@ -32,6 +32,7 @@
       --c-tally:  oklch(0.60 0.20 26);    /* TLOS-001 broadcast red */
       --c-loop:   oklch(0.78 0.15 75);    /* TLOS-002 amber LED */
       --c-erra:   oklch(0.80 0.09 60);    /* TLOS-003 paper peach */
+      --c-eran:   oklch(0.55 0.18 295);   /* TLOS-004 erratanet purple */
 
       --font-display: "Space Grotesk", system-ui, sans-serif;
       --font-ui:      "Inter", system-ui, sans-serif;
@@ -155,7 +156,7 @@
     /* ───────────────── color chip strip ──────────────────────────────── */
     .chips {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       border-bottom: 1px solid var(--rule);
     }
     .chip {
@@ -173,6 +174,7 @@
     .chip[data-c="tally"]  { background: var(--c-tally);  color: var(--paper); }
     .chip[data-c="loop"]   { background: var(--c-loop);   color: var(--ink); }
     .chip[data-c="erra"]   { background: var(--c-erra);   color: var(--ink); }
+    .chip[data-c="eran"]   { background: var(--c-eran);   color: var(--paper); }
     .chip .id {
       font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85;
     }
@@ -185,8 +187,9 @@
     }
     @media (max-width: 640px) {
       .chips { grid-template-columns: repeat(2, 1fr); }
-      .chip:nth-child(2) { border-right: 0; }
-      .chip:nth-child(1), .chip:nth-child(2) { border-bottom: 1px solid var(--rule); }
+      .chip:nth-child(2n) { border-right: 0; }
+      .chip:nth-child(-n+4) { border-bottom: 1px solid var(--rule); }
+      .chip:nth-child(5) { grid-column: 1 / -1; border-right: 0; }
     }
 
     /* ───────────────── bay / instruments (TE product-spec rows) ───── */
@@ -222,6 +225,7 @@
     .swatch[data-c="tally"] { background: var(--c-tally); }
     .swatch[data-c="loop"]  { background: var(--c-loop); }
     .swatch[data-c="erra"]  { background: var(--c-erra); }
+    .swatch[data-c="eran"]  { background: var(--c-eran); }
     .unit-code .code {
       font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); display: block;
     }
@@ -348,9 +352,10 @@
 
     /* easter egg flash on bay names */
     .unit.flash .nm-big { color: var(--slot-flash, var(--ink)); transition: color 0.18s ease-out; }
-    .unit[href="/tally/"]   { --slot-flash: var(--c-tally); }
-    .unit[href="/loopdec/"] { --slot-flash: var(--c-loop);  }
-    .unit[href="/errata/"]  { --slot-flash: var(--c-erra);  }
+    .unit[href="/tally/"]      { --slot-flash: var(--c-tally); }
+    .unit[href="/loopdec/"]    { --slot-flash: var(--c-loop);  }
+    .unit[href="/errata/"]     { --slot-flash: var(--c-erra);  }
+    .unit[href="/errata-net/"] { --slot-flash: var(--c-eran);  }
 
     /* live UTC clock */
     .clock {
@@ -424,7 +429,7 @@
     </div>
     <h1 class="wordmark" aria-label="Tealios">teal<span class="lit">i</span>os</h1>
     <div class="plate-foot">
-      <div class="spec sk">UNITS<b data-count="3" data-pad="2">00</b></div>
+      <div class="spec sk">UNITS<b data-count="4" data-pad="2">00</b></div>
       <div class="spec sk">OPERATORS<b data-count="1" data-pad="2">00</b></div>
       <div class="spec sk">DELIVERY<b>Download</b></div>
       <div class="spec sk">PLATFORM<b>Desktop</b></div>
@@ -448,12 +453,16 @@
       <span class="id">TLOS-003 · Paper</span>
       <span class="nm">Errata</span>
     </div>
+    <div class="chip" data-c="eran" style="--idx: 4">
+      <span class="id">TLOS-004 · Mesh</span>
+      <span class="nm">Erratanet</span>
+    </div>
   </section>
 
   <section id="instruments">
     <div class="bay-head">
       <span class="sk"><b>BAY</b></span>
-      <span class="sk">03 / 03</span>
+      <span class="sk">04 / 04</span>
     </div>
 
     <a class="unit" href="/tally/">
@@ -514,6 +523,26 @@
           <span class="sk-chip">React</span>
           <span class="sk-chip">Elysia</span>
           <span class="sk-chip">Fragment system</span>
+        </div>
+      </div>
+      <div class="unit-link">Open page <span class="arrow">→</span></div>
+    </a>
+
+    <a class="unit" href="/errata-net/">
+      <div class="unit-id">
+        <div class="swatch" data-c="eran" aria-hidden="true"></div>
+        <div class="unit-code">
+          <span class="code">TLOS-004</span>
+          <span class="typ">Sharing platform</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="nm-big">Erratanet</div>
+        <div class="tag">Community platform for sharing Errata stories, fragments, and plugins.</div>
+        <div class="specline">
+          <span class="sk-chip">Web</span>
+          <span class="sk-chip">Paired with Errata</span>
+          <span class="sk-chip">errata.tealios.com</span>
         </div>
       </div>
       <div class="unit-link">Open page <span class="arrow">→</span></div>
