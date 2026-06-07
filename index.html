@@ -257,6 +257,115 @@
 
     #instruments { border-bottom: 1px solid var(--rule); }
 
+    /* ───────────────── delight ───────────────────────────────────── */
+    @media (prefers-reduced-motion: no-preference) {
+      .wordmark {
+        animation: wm-reveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: 0.1s;
+      }
+      @keyframes wm-reveal {
+        from { clip-path: inset(0 100% 0 0); }
+        to   { clip-path: inset(0 0 0 0); }
+      }
+      .chips .chip {
+        animation: chip-on 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: calc(var(--idx, 0) * 0.12s + 0.7s);
+      }
+      .chips.replay .chip {
+        animation: chip-on 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: calc(var(--idx, 0) * 0.11s);
+      }
+      @keyframes chip-on {
+        0%   { opacity: 0; transform: translateY(3px) scaleY(0.9); filter: brightness(0.55); }
+        55%  { opacity: 1; transform: translateY(0) scaleY(1);     filter: brightness(1.5) saturate(1.25); }
+        100% { opacity: 1; transform: translateY(0) scaleY(1);     filter: brightness(1); }
+      }
+      .plate-foot .spec b {
+        opacity: 0;
+        animation: fade-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+      }
+      .plate-foot .spec:nth-child(2) b { animation-delay: 0.62s; }
+      .plate-foot .spec:nth-child(3) b { animation-delay: 0.74s; }
+      .plate-foot .spec:nth-child(4) b { animation-delay: 0.86s; }
+      @keyframes fade-rise {
+        from { opacity: 0; transform: translateY(4px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+    }
+
+    /* clickable easter egg target */
+    .wordmark .lit {
+      cursor: pointer;
+      transition: filter 0.18s var(--ease-out), transform 0.18s var(--ease-out);
+      display: inline-block;
+    }
+    .wordmark .lit:hover  { filter: brightness(1.18) saturate(1.1); }
+    .wordmark .lit:active { transform: translateY(1px); filter: brightness(1.45) saturate(1.2); }
+
+    /* chip scan-line on hover */
+    .chip { overflow: hidden; }
+    .chip::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 0%, oklch(0.99 0.005 100 / 0.32) 50%, transparent 100%);
+      transform: translateY(-110%);
+      pointer-events: none;
+    }
+    .chip:hover::after { animation: chip-scan 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    @keyframes chip-scan {
+      from { transform: translateY(-110%); }
+      to   { transform: translateY(110%); }
+    }
+
+    /* bay row tactile hover */
+    .unit .swatch { transition: transform 0.3s var(--ease-out), filter 0.3s var(--ease-out); }
+    .unit:hover .swatch { transform: scale(1.06); filter: brightness(1.08) saturate(1.1); }
+    .unit .nm-big { transition: letter-spacing 0.3s var(--ease-out), color 0.25s var(--ease-out); }
+    .unit:hover .nm-big { letter-spacing: -0.062em; }
+    .unit:hover .tag { color: var(--ink); }
+    .unit .code { transition: color 0.2s var(--ease-out); }
+    .unit:hover .code { color: var(--ink); }
+
+    /* easter egg flash on bay names */
+    .unit.flash .nm-big { color: var(--slot-flash, var(--ink)); transition: color 0.18s ease-out; }
+    .unit[href="/tally/"]   { --slot-flash: var(--c-tally); }
+    .unit[href="/loopdec/"] { --slot-flash: var(--c-loop);  }
+    .unit[href="/errata/"]  { --slot-flash: var(--c-erra);  }
+
+    /* live UTC clock */
+    .clock {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.14em;
+      color: var(--ink);
+    }
+    .clock .colon { animation: tick 1s steps(2, end) infinite; }
+    @keyframes tick { 50% { opacity: 0.25; } }
+
+    /* footer reel */
+    .reel {
+      display: inline-block;
+      width: 0.7em; height: 0.7em;
+      border: 1px solid currentColor;
+      position: relative;
+      vertical-align: -0.08em;
+      margin-right: 0.55em;
+    }
+    .reel::before {
+      content: ""; position: absolute; inset: 30%;
+      border-radius: 50%; background: currentColor;
+    }
+    .reel::after {
+      content: ""; position: absolute; inset: -1px;
+      border: 1px solid var(--c-signal);
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      animation: reel-spin 4s linear infinite;
+    }
+    @keyframes reel-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .reel::after, .clock .colon { animation: none; }
+    }
+
     /* ───────────────── footer plate ───────────────────────────────── */
     footer {
       display: grid;
@@ -283,7 +392,7 @@
 
   <header class="silkscreen">
     <span class="sk"><b>TLOS</b> · MOD.2026</span>
-    <span class="sk mid">tealios.com</span>
+    <span class="sk mid clock" aria-label="Current UTC time">UTC --<span class="colon">:</span>--<span class="colon">:</span>--</span>
     <a class="sk" href="https://github.com/tealios">github →</a>
   </header>
 
@@ -294,27 +403,27 @@
     </div>
     <h1 class="wordmark" aria-label="Tealios">teal<span class="lit">i</span>os</h1>
     <div class="plate-foot">
-      <div class="spec sk">UNITS<b>03</b></div>
-      <div class="spec sk">OPERATORS<b>01</b></div>
+      <div class="spec sk">UNITS<b data-count="3" data-pad="2">00</b></div>
+      <div class="spec sk">OPERATORS<b data-count="1" data-pad="2">00</b></div>
       <div class="spec sk">DELIVERY<b>Download</b></div>
       <div class="spec sk">PLATFORM<b>Desktop</b></div>
     </div>
   </section>
 
   <section class="chips" aria-label="House palette">
-    <div class="chip" data-c="signal">
+    <div class="chip" data-c="signal" style="--idx: 0">
       <span class="id">TLOS · Signal</span>
       <span class="nm">Tealios</span>
     </div>
-    <div class="chip" data-c="tally">
+    <div class="chip" data-c="tally" style="--idx: 1">
       <span class="id">TLOS-001 · On-air</span>
       <span class="nm">Tally</span>
     </div>
-    <div class="chip" data-c="loop">
+    <div class="chip" data-c="loop" style="--idx: 2">
       <span class="id">TLOS-002 · LED</span>
       <span class="nm">LoopDec</span>
     </div>
-    <div class="chip" data-c="erra">
+    <div class="chip" data-c="erra" style="--idx: 3">
       <span class="id">TLOS-003 · Paper</span>
       <span class="nm">Errata</span>
     </div>
@@ -391,13 +500,69 @@
   </section>
 
   <footer>
-    <span><b>SN.</b>2026.06.A</span>
+    <span><span class="reel" aria-hidden="true"></span><b>SN.</b>2026.06.A</span>
     <span class="center"><a href="https://github.com/nokusukun">@nokusukun</a></span>
     <span class="right">
       <a href="mailto:tealios@onlypa.ws">tealios@onlypa.ws</a>
       <a href="https://github.com/tealios">github</a>
     </span>
   </footer>
+
+  <script>
+    (function () {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Live UTC clock
+      const clock = document.querySelector('.clock');
+      if (clock) {
+        const tick = () => {
+          const d = new Date();
+          const pad = n => String(n).padStart(2, '0');
+          clock.innerHTML =
+            'UTC ' + pad(d.getUTCHours())
+            + '<span class="colon">:</span>' + pad(d.getUTCMinutes())
+            + '<span class="colon">:</span>' + pad(d.getUTCSeconds());
+        };
+        tick();
+        setInterval(tick, 1000);
+      }
+
+      // Spec counters
+      document.querySelectorAll('[data-count]').forEach(el => {
+        const target = parseInt(el.dataset.count, 10);
+        const pad = parseInt(el.dataset.pad || '0', 10);
+        const fmt = v => String(v).padStart(pad, '0');
+        if (reduce) { el.textContent = fmt(target); return; }
+        const dur = 750, delay = 220;
+        let start;
+        const step = now => {
+          if (!start) start = now;
+          const t = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - t, 4);
+          el.textContent = fmt(Math.round(target * eased));
+          if (t < 1) requestAnimationFrame(step);
+        };
+        setTimeout(() => requestAnimationFrame(step), delay);
+      });
+
+      // Easter egg: click the 'i' in the wordmark to replay the LED test
+      const lit = document.querySelector('.wordmark .lit');
+      const strip = document.querySelector('.chips');
+      if (lit && strip) {
+        lit.addEventListener('click', () => {
+          strip.classList.remove('replay');
+          void strip.offsetWidth;
+          strip.classList.add('replay');
+          document.querySelectorAll('.unit').forEach((u, i) => {
+            setTimeout(() => {
+              u.classList.add('flash');
+              setTimeout(() => u.classList.remove('flash'), 360);
+            }, 200 + i * 100);
+          });
+        });
+      }
+    })();
+  </script>
 
 </body>
 </html>
