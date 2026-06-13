@@ -33,6 +33,8 @@
       --c-loop:   oklch(0.78 0.15 75);    /* TLOS-002 amber LED */
       --c-erra:   oklch(0.80 0.09 60);    /* TLOS-003 paper peach */
       --c-eran:   oklch(0.55 0.18 295);   /* TLOS-004 erratanet purple */
+      --c-3d:     oklch(0.52 0.20 245);   /* TLOS-005 3d cobalt */
+      --c-draw:   oklch(0.58 0.22 350);   /* TLOS-006 draw magenta */
 
       --font-display: "Space Grotesk", system-ui, sans-serif;
       --font-ui:      "Inter", system-ui, sans-serif;
@@ -157,7 +159,7 @@
     /* ───────────────── color chip strip ──────────────────────────────── */
     .chips {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       border-bottom: 1px solid var(--rule);
     }
     .chip {
@@ -171,11 +173,12 @@
       justify-content: space-between;
     }
     .chip:last-child { border-right: 0; }
-    .chip[data-c="signal"] { background: var(--c-signal); color: var(--ink); }
     .chip[data-c="tally"]  { background: var(--c-tally);  color: var(--paper); }
     .chip[data-c="loop"]   { background: var(--c-loop);   color: var(--ink); }
     .chip[data-c="erra"]   { background: var(--c-erra);   color: var(--ink); }
     .chip[data-c="eran"]   { background: var(--c-eran);   color: var(--paper); }
+    .chip[data-c="3d"]     { background: var(--c-3d);     color: var(--paper); }
+    .chip[data-c="draw"]   { background: var(--c-draw);   color: var(--paper); }
     .chip .id {
       font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85;
     }
@@ -190,7 +193,6 @@
       .chips { grid-template-columns: repeat(2, 1fr); }
       .chip:nth-child(2n) { border-right: 0; }
       .chip:nth-child(-n+4) { border-bottom: 1px solid var(--rule); }
-      .chip:nth-child(5) { grid-column: 1 / -1; border-right: 0; }
     }
 
     /* ───────────────── bay / instruments (TE product-spec rows) ───── */
@@ -227,6 +229,8 @@
     .swatch[data-c="loop"]  { background: var(--c-loop); }
     .swatch[data-c="erra"]  { background: var(--c-erra); }
     .swatch[data-c="eran"]  { background: var(--c-eran); }
+    .swatch[data-c="3d"]    { background: var(--c-3d); }
+    .swatch[data-c="draw"]  { background: var(--c-draw); }
     .unit-code .code {
       font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); display: block;
     }
@@ -357,6 +361,8 @@
     .unit[href="/loopdec/"]    { --slot-flash: var(--c-loop);  }
     .unit[href="/errata/"]     { --slot-flash: var(--c-erra);  }
     .unit[href="/errata-net/"] { --slot-flash: var(--c-eran);  }
+    .unit[href="/3d/"]         { --slot-flash: var(--c-3d);    }
+    .unit[href="/draw/"]       { --slot-flash: var(--c-draw);  }
 
     /* live UTC clock */
     .clock {
@@ -430,7 +436,7 @@
     </div>
     <h1 class="wordmark" aria-label="Tealios">teal<span class="lit">i</span>os</h1>
     <div class="plate-foot">
-      <div class="spec sk">UNITS<b data-count="4" data-pad="2">00</b></div>
+      <div class="spec sk">UNITS<b data-count="6" data-pad="2">00</b></div>
       <div class="spec sk">OPERATORS<b data-count="1" data-pad="2">00</b></div>
       <div class="spec sk">DELIVERY<b>Download</b></div>
       <div class="spec sk">PLATFORM<b>Desktop</b></div>
@@ -438,32 +444,36 @@
   </section>
 
   <section class="chips" aria-label="House palette">
-    <div class="chip" data-c="signal" style="--idx: 0">
-      <span class="id">TLOS · Signal</span>
-      <span class="nm">Tealios</span>
-    </div>
-    <div class="chip" data-c="tally" style="--idx: 1">
+    <div class="chip" data-c="tally" style="--idx: 0">
       <span class="id">TLOS-001 · On-air</span>
       <span class="nm">Tally</span>
     </div>
-    <div class="chip" data-c="loop" style="--idx: 2">
+    <div class="chip" data-c="loop" style="--idx: 1">
       <span class="id">TLOS-002 · LED</span>
       <span class="nm">LoopDec</span>
     </div>
-    <div class="chip" data-c="erra" style="--idx: 3">
+    <div class="chip" data-c="erra" style="--idx: 2">
       <span class="id">TLOS-003 · Paper</span>
       <span class="nm">Errata</span>
     </div>
-    <div class="chip" data-c="eran" style="--idx: 4">
+    <div class="chip" data-c="eran" style="--idx: 3">
       <span class="id">TLOS-004 · Mesh</span>
       <span class="nm">Erratanet</span>
+    </div>
+    <div class="chip" data-c="3d" style="--idx: 4">
+      <span class="id">TLOS-005 · Volume</span>
+      <span class="nm">3d</span>
+    </div>
+    <div class="chip" data-c="draw" style="--idx: 5">
+      <span class="id">TLOS-006 · Ink</span>
+      <span class="nm">draw</span>
     </div>
   </section>
 
   <section id="instruments">
     <div class="bay-head">
       <span class="sk"><b>BAY</b></span>
-      <span class="sk">04 / 04</span>
+      <span class="sk">06 / 06</span>
     </div>
 
     <a class="unit" href="/tally/">
@@ -544,6 +554,44 @@
           <span class="sk-chip">Web</span>
           <span class="sk-chip">Paired with Errata</span>
           <span class="sk-chip">errata.tealios.com</span>
+        </div>
+      </div>
+      <div class="unit-link">Open page <span class="arrow">→</span></div>
+    </a>
+
+    <a class="unit" href="/3d/">
+      <div class="unit-id">
+        <div class="swatch" data-c="3d" aria-hidden="true"></div>
+        <div class="unit-code">
+          <span class="code">TLOS-005</span>
+          <span class="typ">3D tool</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="nm-big">3d</div>
+        <div class="tag">A 3D tool at the studio.</div>
+        <div class="specline">
+          <span class="sk-chip">Web</span>
+          <span class="sk-chip">3d.tealios.com</span>
+        </div>
+      </div>
+      <div class="unit-link">Open page <span class="arrow">→</span></div>
+    </a>
+
+    <a class="unit" href="/draw/">
+      <div class="unit-id">
+        <div class="swatch" data-c="draw" aria-hidden="true"></div>
+        <div class="unit-code">
+          <span class="code">TLOS-006</span>
+          <span class="typ">Drawing tool</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="nm-big">draw</div>
+        <div class="tag">A drawing tool at the studio.</div>
+        <div class="specline">
+          <span class="sk-chip">Web</span>
+          <span class="sk-chip">draw.tealios.com</span>
         </div>
       </div>
       <div class="unit-link">Open page <span class="arrow">→</span></div>
@@ -652,36 +700,27 @@
               vec2 uv = gl_FragCoord.xy / u_res;
               float t = u_time * 0.14;
 
-              // three product-hue fields: amber, peach, red.
-              float fAmber = pow(sin(uv.x*1.7 - uv.y*1.9 - t*0.65 + 1.6)*0.5 + 0.5, 1.5);
-              float fPeach = pow(sin(uv.x*2.1 - uv.y*1.2 + t*0.55 + 3.2)*0.5 + 0.5, 1.6);
-              float fRed   = pow(sin(uv.x*1.3 + uv.y*2.3 - t*0.50 + 4.8)*0.5 + 0.5, 2.2);
+              // single drifting field — two sin layers, combined
+              float f1 = sin(uv.x*1.8 + uv.y*1.4 + t*0.7) * 0.5 + 0.5;
+              float f2 = sin(uv.x*1.2 - uv.y*1.9 - t*0.55 + 1.3) * 0.5 + 0.5;
+              float field = pow((f1 + f2) * 0.5, 1.5);
 
-              float intensity = max(max(fAmber, fPeach), fRed);
+              // three-palette weights: paper, paper-2, single hue
+              float wPaper  = max(0.0, 1.0 - field) * 1.3;
+              float wPaper2 = field * 0.55;
+              float wHue    = field;
+              float total   = wPaper + wPaper2 + wHue + 0.001;
 
-              // five-palette weights. paper dominates when intensity is low,
-              // paper-2 bridges into the hue band, hues compete on top.
-              float wPaper  = max(0.0, 1.0 - intensity) * 1.25;
-              float wPaper2 = intensity * 0.55;
-              float total   = wPaper + wPaper2 + fAmber + fPeach + fRed + 0.001;
-
-              // CDF over the 5 palette entries
               float c0 = wPaper  / total;
               float c1 = c0 + wPaper2 / total;
-              float c2 = c1 + fAmber  / total;
-              float c3 = c2 + fPeach  / total;
-              // c4 == 1.0 by construction
+              // c2 == 1.0 by construction
 
-              // 8x8 ordered Bayer → which palette slot does this pixel fall in
               float thr = bayer8(gl_FragCoord.xy);
 
               vec3 col;
               if      (thr < c0) col = vec3(0.968, 0.965, 0.941); // paper
               else if (thr < c1) col = vec3(0.933, 0.930, 0.901); // paper-2
-              else if (thr < c2) col = vec3(0.958, 0.771, 0.510); // amber, softened
-              else if (thr < c3) col = vec3(0.964, 0.812, 0.692); // peach, softened
-              else               col = vec3(0.921, 0.511, 0.475); // red, softened
-
+              else               col = vec3(0.964, 0.812, 0.692); // peach
               gl_FragColor = vec4(col, 1.0);
             }
           `;
